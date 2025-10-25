@@ -19,6 +19,9 @@ A code editor (recommended: VS Code
 (Optional) Git
  if you’re cloning from GitHub
 
+ use "git clone" to clone the repo to your local machine.
+
+
 Check installation:
 
 node -v
