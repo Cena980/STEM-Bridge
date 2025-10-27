@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
 
   // Load current user on mount
   useEffect(() => {
-    const currentUser = getCurrentUser(); // or fetch from backend/token
+    const currentUser = getCurrentUser();
     if (currentUser) setUser(currentUser);
     setLoading(false);
   }, []);

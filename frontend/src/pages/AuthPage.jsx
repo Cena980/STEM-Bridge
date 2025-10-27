@@ -40,6 +40,7 @@ function LoginForm({ onToggleMode }) {
       if (!res.ok) throw new Error(data.message || "Login failed");
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       console.log("Login success!", data);
       localStorage.setItem("token", data.token);
       navigate("/dashboard");

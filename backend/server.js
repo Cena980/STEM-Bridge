@@ -35,13 +35,53 @@ app.post("/api/auth/signup", async (req, res) => {
       VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [id, email, fullName, role, hashedPassword, now, now]
     );
+    console.log(`Created user: ${email} (${role})`);
+    return res.json({
+      message: "User created successfully",
+      user: {
+        id,
+        email,
+        full_name: fullName,
+        role:role,
+      },
+      token: id,
+    });
 
-    res.json({ message: "User created successfully", token: id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// ===== CourseList =====
+app.get("/api/auth/courses", async (req, res) => {
+  try {
+    const [rows] = await db.execute("SELECT * FROM courses");
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ===== CREATE COURSE =====
+app.post("/api/auth/create-course", async (req, res) => {
+  const { title, description, code, professor_id, credits, start_date, end_date } = req.body;
+  const id = uuidv4();
+  try {
+    await db.execute(
+      "INSERT INTO courses (id, title, description, course_code,professor_id, credits, start_date, end_date) VALUES (?,?, ?, ?, ?, ?, ?, ?)",
+      [id,title || null, description || null, code || null,professor_id || null, credits || null, start_date || null, end_date || null]
+    );
+
+    res.status(201).json({ message: "Course created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to create course" });
+  }
+});
+
 
 // ===== LOGIN =====
 app.post("/api/auth/login", async (req, res) => {
@@ -65,7 +105,12 @@ app.post("/api/auth/login", async (req, res) => {
     }
 
     // Login success → return a simple token (for now)
-    res.json({ message: "Login successful", token: user.id });
+    return res.json({
+      message: "Login successful",
+      user: rows[0], // includes role, full_name, etc.
+      token: user.id,
+    });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });

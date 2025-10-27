@@ -6,9 +6,16 @@ export async function signIn(email, password) {
     body: JSON.stringify({ email, password }),
   });
   const data = await res.json();
+
   if (!res.ok) return { user: null, error: data.message };
+  console.log(`Signed in user: ${data.user}`);
+
+  // ✅ store user in localStorage
+  localStorage.setItem("user", JSON.stringify(data.user));
+
   return { user: data.user, error: null };
 }
+
 
 export async function signUp(email, password, fullName, role) {
   const res = await fetch("http://localhost:5000/api/auth/signup", {
@@ -18,6 +25,7 @@ export async function signUp(email, password, fullName, role) {
   });
   const data = await res.json();
   if (!res.ok) return { user: null, error: data.message };
+  localStorage.setItem("user", JSON.stringify(data.user));
   return { user: data.user, error: null };
 }
 
