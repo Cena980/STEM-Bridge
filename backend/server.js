@@ -64,6 +64,17 @@ app.get("/api/auth/courses", async (req, res) => {
   }
 });
 
+// ===== CourseDetails =====
+app.get("/api/auth/courses/:id", async (req, res) => {
+  try {
+    const [rows] = await db.execute("SELECT * FROM courses where id = ?", [req.params.id] );
+    res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // ===== CREATE COURSE =====
 app.post("/api/auth/create-course", async (req, res) => {
@@ -112,6 +123,69 @@ app.post("/api/auth/login", async (req, res) => {
     });
 
   } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GradeTable
+app.get("/api/auth/courses/:courseId/grades", async (req, res) => {
+  const { courseId } = req.params;
+  try {
+    const [rows] = await db.execute(
+      `SELECT * from courses where id = ?`,
+      [courseId]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// AssignmentList
+app.get("/api/auth/courses/:courseId/assignments", async (req, res) => {
+  const { courseId } = req.params;
+  try {
+    const [rows] = await db.execute(
+      `SELECT * from assignments where course_id = ?`,
+      [courseId]
+    );
+    res.json(rows);
+  }
+  catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ProjectList
+app.get("/api/auth/courses/:courseId/projects", async (req, res) => {
+  const { courseId } = req.params;
+  try {
+    const [rows] = await db.execute(
+      `SELECT * from projects where course_id = ?`,
+      [courseId]
+    );
+    res.json(rows);
+  }
+  catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// QuizList
+app.get("/api/auth/courses/:courseId/quizzes", async (req, res) => {
+  const { courseId } = req.params;
+  try {
+    const [rows] = await db.execute(
+      `SELECT * from quizzes where course_id = ?`,
+      [courseId]
+    );
+    res.json(rows);
+  }
+  catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
