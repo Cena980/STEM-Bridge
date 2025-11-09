@@ -17,16 +17,14 @@ app.post("/api/auth/signup", async (req, res) => {
   }
 
   try {
-    // Check if user exists
+    // if user exists
     const [rows] = await db.execute("SELECT * FROM profiles WHERE email = ?", [email]);
     if (rows.length > 0) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user
     const id = uuidv4();
     const now = new Date();
     await db.execute(
@@ -63,6 +61,38 @@ app.get("/api/auth/courses", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// ===== Student CourseList =====
+app.get("/api/auth/courses/:studentId", async (req, res) => {
+  const { studentId } = req.params;
+
+  if (!studentId) {
+    return res.status(400).json({ message: "Student ID is required" });
+  }
+
+  try {
+    const [courses] = await db.execute(
+      `
+        SELECT c.* 
+        FROM courses c
+        JOIN enrollments e ON c.id = e.course_id
+        WHERE e.student_id = ?
+      `,
+      [studentId]
+    );
+
+    if (courses.length === 0) {
+      return res.status(404).json({ message: "No courses found for this student" });
+    }
+
+    res.json(courses);
+
+  } catch (err) {
+    console.error("Error fetching student courses:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // ===== CourseDetails =====
 app.get("/api/auth/courses/:id", async (req, res) => {
@@ -115,10 +145,9 @@ app.post("/api/auth/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // Login success → return a simple token (for now)
     return res.json({
       message: "Login successful",
-      user: rows[0], // includes role, full_name, etc.
+      user: rows[0],
       token: user.id,
     });
 
