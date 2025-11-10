@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, Bell, Settings } from "lucide-react";
+import { LayoutDashboard, Bell, Settings, LogOut } from "lucide-react";
 import { getCurrentUser, signOut } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -18,9 +18,15 @@ export default function Navbar() {
     { name: "Dashboard", icon: LayoutDashboard },
     { name: "Notifications", icon: Bell },
     { name: "Settings", icon: Settings },
+    { name: "Sign Out", icon: LogOut },
   ];
     const handleButtonClick = (name) => {
-    navigate(`/${name}`);
+      if (name === "Sign Out") {
+        handleSignOut();
+        return;
+      } else {
+        navigate(`/${name}`);
+      }
   };
     const handleSignOut = () => {
     signOut();          // clears user + token
@@ -28,10 +34,10 @@ export default function Navbar() {
   };
 
   return (
-      <div className="bg-white max-h-20 m-4 rounded-lg">
+      <div className="bg-gray-700 max-h-20 m-4 rounded-lg">
         <div className="flex justify-between items-center px-8 py-4">
           <div className="justify-start">
-            <h1 className="text-xl font-bold text-gray-800">STEM Bridge</h1>
+            <h1 className="text-xl font-bold text-white">STEM Bridge</h1>
           </div>
           <div className="md:flex inline-flex items-center space-x-6">
             {topNavItems.map((item) => {
@@ -40,19 +46,13 @@ export default function Navbar() {
                 <button
                   key={item.name}
                   onClick={() => handleButtonClick(item.name)}
-                  className="flex items-center text-gray-600 hover:text-blue-600 transition-colors"
+                  className="flex items-center bg-transparent text-gray-400 hover:text-blue-600 transition-colors"
                   title={item.name}
                 >
                   <IconComponent className="w-5 h-5" />
                 </button>
               );
             })}
-            <button
-              onClick={handleSignOut}
-              className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-            >
-              Sign Out
-            </button>
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-medium">

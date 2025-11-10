@@ -65,7 +65,7 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div className="flex justify-between items-center mb-8 bg-blue-100 rounded-lg p-4">
+      <div className="flex justify-between items-center mb-8 bg-gray-400 rounded-lg p-4">
         <h2 className="text-3xl font-bold text-gray-800">My Courses</h2>
         {role === "professor" && (
           <button

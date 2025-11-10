@@ -37,3 +37,11 @@ export function getCurrentUser() {
   const userStr = localStorage.getItem("user");
   return userStr ? JSON.parse(userStr) : null;
 }
+export function updateUserProfile(updatedData) {
+  const userStr = localStorage.getItem("user");
+  if (!userStr) return null;
+  const user = JSON.parse(userStr);
+  const updatedUser = { ...user, ...updatedData };
+  localStorage.setItem("user", JSON.stringify(updatedUser));
+  return updatedUser;
+}

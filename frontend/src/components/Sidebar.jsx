@@ -12,19 +12,19 @@ export default function Sidebar() {
         { name: "Community", icon: Users },
     ];
     return (
-        <div className="md:w-64 bg-white m-4 rounded-lg max-h-72">
+        <div className="md:w-64 bg-gray-700 m-4 rounded-lg max-h-72">
           <nav className="mt-6">
             <ul className="p-0">
               {navItems.map((item) => {
                 const IconComponent = item.icon;
                 return (
-                  <ul key={item.name} className="mb-1 inline-flex w-min">
+                  <ul key={item.name} className="mb-1 inline-flex w-min-32">
                     <Link to={`/${item.name.toLowerCase()}`}
                       onClick={() => setActiveNav(item.name)}
-                      className={`flex no-underline items-center w-full px-6 py-3 text-left transition-colors ${
+                      className={`flex no-underline items-center w-32 px-6 py-3 text-left transition-colors ${
                         activeNav === item.name
                           ? "text-black text-l font-extrabold border-0 border-l-2 border-white bg-transparent"
-                          : "text-black font-bold border-0 w-32 rounded-lg bg-gray-100 hover:scale-110 hover:bg-gray-200"
+                          : "text-black font-bold border-0 rounded-lg bg-gray-400 hover:scale-110 hover:bg-gray-200"
                       }`}
                     >
                       <IconComponent className="w-5 h-5 mr-3" />
