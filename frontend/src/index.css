@@ -1,3 +1,6 @@
-/* Tailwind v4 syntax */
+@import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+
+@custom-variant hover (&:hover);

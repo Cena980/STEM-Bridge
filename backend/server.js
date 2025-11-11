@@ -1,16 +1,47 @@
 import express from "express";
-import cors from "cors";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
+import mysql from "mysql2/promise";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import cors from "cors";
+
 import { db } from "./db.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+
+// Set up storage for avatars
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, "uploads/avatars");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Save file as: avatar-<timestamp>.<ext>
+    const ext = path.extname(file.originalname);
+    cb(null, `avatar-${Date.now()}${ext}`);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // ===== SIGNUP =====
-app.post("/api/auth/signup", async (req, res) => {
+app.post("/api/auth/signup", upload.single("avatar"), async (req, res) => {
   const { fullName, email, password, role } = req.body;
+  const avatarFile = req.file; // this will contain the uploaded file
 
   if (!fullName || !email || !password || !role) {
     return res.status(400).json({ message: "All fields are required" });
@@ -29,10 +60,20 @@ app.post("/api/auth/signup", async (req, res) => {
     const now = new Date();
     await db.execute(
       `INSERT INTO profiles 
-      (id, email, full_name, role, password, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [id, email, fullName, role, hashedPassword, now, now]
+      (id, email, full_name, role, password, avatar_url, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        id,
+        email,
+        fullName,
+        role,
+        hashedPassword,
+        avatarFile ? `/uploads/avatars/${avatarFile.filename}` : null, // store avatar path
+        now,
+        now,
+      ]
     );
+
     console.log(`Created user: ${email} (${role})`);
     return res.json({
       message: "User created successfully",
@@ -40,7 +81,8 @@ app.post("/api/auth/signup", async (req, res) => {
         id,
         email,
         full_name: fullName,
-        role:role,
+        role,
+        avatar: avatarFile ? `/uploads/avatars/${avatarFile.filename}` : null,
       },
       token: id,
     });
@@ -50,6 +92,7 @@ app.post("/api/auth/signup", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // ===== CourseList =====
 app.get("/api/auth/courses", async (req, res) => {

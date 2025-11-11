@@ -39,7 +39,7 @@ export default function CourseCard({ course }) {
     return (
       <Link
         to={`/courses/${course.id}`}
-        className={`block ${bgColor} p-4 no-underline text-white rounded-lg shadow hover:scale-105 transition-transform`}
+        className={`block p-4 no-underline text-white rounded-lg shadow transform transition-transform duration-300 hover:scale-[1.02]  ${bgColor}`}
       >
         <h3 className="text-xl font-semibold">{course.title}</h3>
         <p className="text-white-500 mb-1">{course.description}</p>

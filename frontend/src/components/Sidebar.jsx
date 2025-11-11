@@ -12,23 +12,23 @@ export default function Sidebar() {
         { name: "Community", icon: Users },
     ];
     return (
-        <div className="md:w-64 bg-gray-700 m-4 rounded-lg max-h-72">
-          <nav className="mt-6">
-            <ul className="p-0">
+        <div className="md:w-64 bg-slate-800 m-4 p-4 rounded-lg max-h-78">
+          <nav className="">
+            <ul className="p-0 grid grid-cols-5 md:grid-cols-1 gap-1">
               {navItems.map((item) => {
                 const IconComponent = item.icon;
                 return (
-                  <ul key={item.name} className="mb-1 inline-flex w-min-32">
+                  <ul key={item.name} className="mx-auto w-10 md:w-40">
                     <Link to={`/${item.name.toLowerCase()}`}
                       onClick={() => setActiveNav(item.name)}
-                      className={`flex no-underline items-center w-32 px-6 py-3 text-left transition-colors ${
+                      className={`flex no-underline items-center p-1 md:px-6 md:py-3 text-left transition-colors ${
                         activeNav === item.name
-                          ? "text-black text-l font-extrabold border-0 border-l-2 border-white bg-transparent"
-                          : "text-black font-bold border-0 rounded-lg bg-gray-400 hover:scale-110 hover:bg-gray-200"
+                          ? "text-white text-l font-extrabold border-0 border-l-2 border-white bg-transparent"
+                          : "text-black font-bold border-0 rounded-lg bg-gray-400 hover:scale-105 transition-all duration-300 hover:bg-gray-200"
                       }`}
                     >
-                      <IconComponent className="w-5 h-5 mr-3" />
-                      {item.name}
+                      <IconComponent className=" w-5 h-5 mr-3" />
+                      <span className="hidden md:inline">{item.name}</span>
                     </Link>
                   </ul>
                 );

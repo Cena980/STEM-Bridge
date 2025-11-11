@@ -9,7 +9,7 @@ export default function Layout({ children }) {
       <Navbar />
       <div className="md:flex flex-1">
         <Sidebar />
-        <main className="flex-1 p-8 bg-gray-700 m-4 rounded-lg">{children}</main>
+        <main className="flex-1 p-8 bg-slate-800 m-4 rounded-lg">{children}</main>
       </div>
       <Footer />
     </div>

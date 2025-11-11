@@ -7,23 +7,23 @@ export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    full_name: "",
     email: "",
     role: "",
     bio: "",
-    avatar: "",
+    avatar_url: "",
   });
 
   useEffect(() => {
-    const currentUser = getCurrentUser(); // fetch user info from auth
+    const currentUser = getCurrentUser();
     if (currentUser) {
       setUser(currentUser);
       setFormData({
-        name: currentUser.name,
+        full_name: currentUser.full_name,
         email: currentUser.email,
         role: currentUser.role || "Student",
         bio: currentUser.bio || "",
-        avatar: currentUser.avatar || "",
+        avatar_url: currentUser.avatar_url || "",
       });
     }
   }, []);
@@ -61,7 +61,7 @@ export default function ProfilePage() {
           {/* Avatar Section */}
           <div className="relative">
             <img
-              src={formData.avatar || "https://via.placeholder.com/120"}
+              src={formData.avatar_url ? `http://localhost:5000${formData.avatar_url}` : "https://via.placeholder.com/150"}
               alt="Avatar"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
             />
@@ -82,7 +82,7 @@ export default function ProfilePage() {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-900">
-                {formData.name}
+                {formData.full_name}
               </h2>
               <button
                 onClick={() => setEditMode(!editMode)}
@@ -99,7 +99,7 @@ export default function ProfilePage() {
                 {editMode ? (
                   <input
                     name="name"
-                    value={formData.name}
+                    value={formData.full_name}
                     onChange={handleChange}
                     className="border rounded px-2 py-1 w-full"
                   />

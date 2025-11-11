@@ -4,6 +4,7 @@ import Courses from './pages/Courses';
 import Dashboard from './pages/Dashboard';
 import CourseDetails from "./pages/CourseDetails";
 import Profile from "./pages/Profile";
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {

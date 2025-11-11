@@ -1,6 +1,6 @@
 
 import { LayoutDashboard, Bell, Settings, LogOut } from "lucide-react";
-import { getCurrentUser, signOut } from "../lib/auth";
+import { getCurrentUser } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -29,12 +29,12 @@ export default function Navbar() {
       }
   };
     const handleSignOut = () => {
-    signOut();          // clears user + token
-    navigate("/"); // redirect to login page
+    signOut();
+    navigate("/");
   };
 
   return (
-      <div className="bg-gray-700 max-h-20 m-4 rounded-lg">
+      <div className="bg-slate-800 max-h-20 m-4 rounded-lg">
         <div className="flex justify-between items-center px-8 py-4">
           <div className="justify-start">
             <h1 className="text-xl font-bold text-white">STEM Bridge</h1>

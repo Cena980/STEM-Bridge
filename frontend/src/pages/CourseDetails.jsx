@@ -39,7 +39,7 @@ export default function CourseDetails() {
         <div className="mb-8 border-b pb-4">
           <h1 className="text-4xl font-bold text-blue-700">{course.title}</h1>
           <p className="text-gray-600 mt-2">{course.description}</p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-200 mt-1">
             Code: {course.course_code} | {course.credits} Credits
           </p>
         </div>
