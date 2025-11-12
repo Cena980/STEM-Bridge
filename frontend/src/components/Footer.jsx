@@ -4,7 +4,7 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="max-w-screen m-4 bg-slate-800 rounded-lg text-gray-300 py-4 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
         {/* Logo & About */}
         <div>
           <h2 className="text-2xl font-bold text-gray-300 mb-3">STEM Bridge</h2>
@@ -27,11 +27,11 @@ export default function Footer() {
         {/* Social Media */}
         <div>
           <h3 className="text-lg font-semibold text-gray-300 mb-3">Follow Us</h3>
-          <div className="flex space-x-4">
-            <a href="#" className="hover:text-white"><Facebook size={20} color="gray" /></a>
-            <a href="#" className="hover:text-white"><Twitter size={20} color="gray" /></a>
-            <a href="#" className="hover:text-white"><Instagram size={20} color="gray" /></a>
-            <a href="#" className="hover:text-white"><Linkedin size={20} color="gray" /></a>
+          <div className="flex space-x-4 justify-center md:justify-start">
+            <a href="#" className="text-gray-400 hover:text-white"><Facebook size={20} /></a>
+            <a href="#" className="text-gray-400 hover:text-white"><Twitter size={20}/></a>
+            <a href="#" className="text-gray-400 hover:text-white"><Instagram size={20}/></a>
+            <a href="#" className="text-gray-400 hover:text-white"><Linkedin size={20} /></a>
           </div>
         </div>
       </div>

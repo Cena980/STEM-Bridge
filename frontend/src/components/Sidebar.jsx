@@ -23,8 +23,8 @@ export default function Sidebar() {
                       onClick={() => setActiveNav(item.name)}
                       className={`flex no-underline items-center p-1 md:px-6 md:py-3 text-left transition-colors ${
                         activeNav === item.name
-                          ? "text-white text-l font-extrabold border-0 border-l-2 border-white bg-transparent"
-                          : "text-black font-bold border-0 rounded-lg bg-gray-400 hover:scale-105 transition-all duration-300 hover:bg-gray-200"
+                          ? "text-white text-l font-extrabold rounded-lg ml-3 bg-transparent"
+                          : "text-gray-200 font-bold rounded-lg hover:scale-105 transition-all duration-300 hover:bg-gray-700"
                       }`}
                     >
                       <IconComponent className=" w-5 h-5 mr-3" />

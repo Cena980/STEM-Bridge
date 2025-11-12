@@ -14,13 +14,21 @@ export default function CourseDetails() {
   const [loading, setLoading] = useState(true);
   const user = getCurrentUser();
   const role = user?.role || "student";
+  const [activeTab, setActiveTab] = useState("assignments");
+
+  const tabs = [
+    { id: "assignments", label: "Assignments" },
+    { id: "projects", label: "Projects" },
+    { id: "quizzes", label: "Quizzes" },
+    { id: "grades", label: "Grades" },
+  ];
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/auth/courses/${id}`);
         const data = await res.json();
-        setCourse(data);
+        setCourse(data[0]);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching course:", err);
@@ -37,8 +45,8 @@ export default function CourseDetails() {
     <Layout>
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 border-b pb-4">
-          <h1 className="text-4xl font-bold text-blue-700">{course.title}</h1>
-          <p className="text-gray-600 mt-2">{course.description}</p>
+          <h1 className="text-4xl font-bold text-gray-200">{course.title}</h1>
+          <p className="text-gray-200 mt-2">{course.description}</p>
           <p className="text-sm text-gray-200 mt-1">
             Code: {course.course_code} | {course.credits} Credits
           </p>
@@ -47,12 +55,30 @@ export default function CourseDetails() {
         {role === "professor" && (
           <ManageTools courseId={id} />
         )}
+        {/* Tabs Navigation */}
+        <div className="flex space-x-4 border-b border-gray-700 mb-6">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`py-2 px-4 text-sm font-medium rounded-t-lg transition-colors duration-200
+                ${
+                  activeTab === tab.id
+                    ? "bg-gray-800 text-white border-b-2 border-blue-500"
+                    : "text-gray-400 hover:text-gray-200"
+                }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-        <div className="grid gap-10">
-          <AssignmentList courseId={id} role={role} />
-          <ProjectList courseId={id} role={role} />
-          <QuizList courseId={id} role={role} />
-          <GradeTable courseId={id} role={role} />
+        {/* Tab Content */}
+        <div className="bg-gray-800 p-6 rounded-xl shadow-lg transition-all duration-300">
+          {activeTab === "assignments" && <AssignmentList courseId={id} role={role} />}
+          {activeTab === "projects" && <ProjectList courseId={id} role={role} />}
+          {activeTab === "quizzes" && <QuizList courseId={id} role={role} />}
+          {activeTab === "grades" && <GradeTable courseId={id} role={role} />}
         </div>
       </div>
     </Layout>

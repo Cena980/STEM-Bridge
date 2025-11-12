@@ -12,17 +12,17 @@ export default function AssignmentList({ courseId, role }) {
 
   return (
     <section>
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Assignments</h2>
+      <h2 className="text-2xl font-bold text-gray-200 mb-4">Assignments</h2>
       {assignments.length ? (
         <ul className="space-y-3">
           {assignments.map((a) => (
-            <li key={a.id} className="bg-white p-4 rounded-md shadow">
-              <h3 className="font-semibold text-blue-700">{a.title}</h3>
-              <p className="text-gray-600">{a.description}</p>
-              <p className="text-sm text-gray-500 mt-1">Due: {a.due_date}</p>
-              <p className="text-sm text-gray-500 mt-1">Points: {a.max_points}</p>
+            <li key={a.id} className="bg-gray-700 p-4 rounded-md shadow">
+              <h3 className="font-semibold text-gray-200">{a.title}</h3>
+              <p className="text-gray-300">{a.description}</p>
+              <p className="text-sm text-gray-300 mt-1">Due: {a.due_date}</p>
+              <p className="text-sm text-gray-300 mt-1">Points: {a.max_points}</p>
               {role === "student" && (
-                <button className="mt-2 text-blue-600 font-medium hover:underline">Submit</button>
+                <button className="mt-2 text-blue-400 font-medium hover:underline">Submit</button>
               )}
             </li>
           ))}

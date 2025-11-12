@@ -51,22 +51,22 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-    <div className="flex justify-between items-center mb-8 bg-gray-400 rounded-lg p-4">
-        <h2 className="text-3xl font-bold text-gray-800">My Profile</h2>
+    <div className="flex justify-between items-center mb-8 rounded-lg p-4">
+        <h2 className="text-3xl font-bold text-gray-200">My Profile</h2>
     </div>
 
-    <div className="bg-gray-400 rounded-lg p-8">
+    <div className="bg-gray-700 rounded-lg p-8">
       <div className="max-w-6xl">
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           {/* Avatar Section */}
-          <div className="relative">
+          <div className="relative hover:scale-105 transition-transform duration-300">
             <img
               src={formData.avatar_url ? `http://localhost:5000${formData.avatar_url}` : "https://via.placeholder.com/150"}
               alt="Avatar"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
             />
             {editMode && (
-              <label className="absolute bottom-2 right-2 bg-gray-800 text-white p-2 rounded-full cursor-pointer hover:bg-gray-700">
+              <label className="absolute bottom-2 right-2 bg-gray-600 text-white p-2 rounded-full cursor-pointer hover:bg-gray-700">
                 <Camera size={16} />
                 <input
                   type="file"
@@ -81,12 +81,12 @@ export default function ProfilePage() {
           {/* Profile Info */}
           <div className="flex-1">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-300">
                 {formData.full_name}
               </h2>
               <button
                 onClick={() => setEditMode(!editMode)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+                className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-500 transition-colors duration-300"
               >
                 {editMode ? <Save size={16} /> : <Edit3 size={16} />}
                 {editMode ? "Save" : "Edit"}
@@ -94,8 +94,8 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <User size={18} className="text-gray-500" />
+              <div className="flex items-center gap-7">
+                <User size={18} className="text-gray-300" />
                 {editMode ? (
                   <input
                     name="name"
@@ -104,12 +104,12 @@ export default function ProfilePage() {
                     className="border rounded px-2 py-1 w-full"
                   />
                 ) : (
-                  <span className="text-gray-700">{formData.name}</span>
+                  <span className="text-gray-300">{formData.full_name}</span>
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
-                <Mail size={18} className="text-gray-500" />
+              <div className="flex items-center gap-7">
+                <Mail size={18} className="text-gray-300" />
                 {editMode ? (
                   <input
                     name="email"
@@ -118,12 +118,12 @@ export default function ProfilePage() {
                     className="border rounded px-2 py-1 w-full"
                   />
                 ) : (
-                  <span className="text-gray-700">{formData.email}</span>
+                  <span className="text-gray-300">{formData.email}</span>
                 )}
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="font-medium text-gray-600">Role:</span>
+                <span className="font-medium text-gray-300">Role:</span>
                 {editMode ? (
                   <select
                     name="role"
@@ -136,12 +136,12 @@ export default function ProfilePage() {
                     <option value="Admin">Admin</option>
                   </select>
                 ) : (
-                  <span className="text-gray-700">{formData.role}</span>
+                  <span className="text-gray-300">{formData.role}</span>
                 )}
               </div>
 
               <div>
-                <p className="font-medium text-gray-600 mb-1">Bio:</p>
+                <p className="font-medium font-semibold text-gray-300 mb-1">Bio</p>
                 {editMode ? (
                   <textarea
                     name="bio"
@@ -151,7 +151,7 @@ export default function ProfilePage() {
                     rows={3}
                   />
                 ) : (
-                  <p className="text-gray-700">{formData.bio || "No bio yet."}</p>
+                  <p className="text-gray-300">{formData.bio || "No bio yet."}</p>
                 )}
               </div>
             </div>

@@ -3,17 +3,36 @@ import { LayoutDashboard, Bell, Settings, LogOut } from "lucide-react";
 import { getCurrentUser } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import React, { useState, useEffect } from "react";
 
 
 
 
 export default function Navbar() {
-
-      const user = getCurrentUser();
-      const role = user?.role || "student";
       const navigate = useNavigate();
       const { signOut } = useAuth();
-
+      const [user, setUser] = useState(null);
+      const [formData, setFormData] = useState({
+        full_name: "",
+        email: "",
+        role: "",
+        bio: "",
+        avatar_url: "",
+      });
+  useEffect(() => {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+      setUser(currentUser);
+      setFormData({
+        full_name: currentUser.full_name,
+        email: currentUser.email,
+        role: currentUser.role || "Student",
+        bio: currentUser.bio || "",
+        avatar_url: currentUser.avatar_url || "",
+      });
+    }
+  }, []);
+  const role = user?.role || "student";
   const topNavItems = [
     { name: "Dashboard", icon: LayoutDashboard },
     { name: "Notifications", icon: Bell },
@@ -55,9 +74,11 @@ export default function Navbar() {
             })}
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">
-                  {role === "professor" ? "P" : "S"}
-                </span>
+                <img
+                  src={formData.avatar_url ? `http://localhost:5000${formData.avatar_url}` : "https://via.placeholder.com/150"}
+                  alt="Avatar"
+                  className="rounded-full object-cover"
+                />
               </div>
             </div>
           </div>

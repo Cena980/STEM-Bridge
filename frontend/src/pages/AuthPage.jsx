@@ -7,7 +7,7 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-800">
       {isLogin ? (
         <LoginForm onToggleMode={() => setIsLogin(false)} />
       ) : (

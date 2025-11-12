@@ -12,12 +12,12 @@ export default function GradeTable({ courseId, role }) {
 
   return (
     <section>
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Grades</h2>
+      <h2 className="text-2xl font-bold text-gray-200 mb-4">Grades</h2>
 
       {grades.length ? (
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg shadow">
-            <thead className="bg-blue-600 text-white">
+          <table className="min-w-full bg-gray-700 rounded-lg shadow">
+            <thead className="bg-green-900 text-white">
               <tr>
                 {role === "professor" && <th className="py-3 px-4 text-left">Student</th>}
                 <th className="py-3 px-4 text-left">Assignment</th>
@@ -32,9 +32,9 @@ export default function GradeTable({ courseId, role }) {
                   {role === "professor" && (
                     <td className="py-2 px-4 text-gray-800">{g.studentName}</td>
                   )}
-                  <td className="py-2 px-4 text-gray-600">{g.assignmentGrade ?? "-"}</td>
-                  <td className="py-2 px-4 text-gray-600">{g.projectGrade ?? "-"}</td>
-                  <td className="py-2 px-4 text-gray-600">{g.quizGrade ?? "-"}</td>
+                  <td className="py-2 px-4 text-gray-300">{g.assignmentGrade ?? "-"}</td>
+                  <td className="py-2 px-4 text-gray-300">{g.projectGrade ?? "-"}</td>
+                  <td className="py-2 px-4 text-gray-300">{g.quizGrade ?? "-"}</td>
                   <td className="py-2 px-4 font-semibold text-blue-700">{g.total ?? "-"}</td>
                 </tr>
               ))}

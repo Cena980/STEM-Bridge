@@ -12,20 +12,20 @@ export default function QuizList({ courseId, role }) {
 
   return (
     <section>
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Quizzes</h2>
+      <h2 className="text-2xl font-bold text-gray-200 mb-4">Quizzes</h2>
       {quizzes.length ? (
         <ul className="space-y-3">
           {quizzes.map((quiz) => (
-            <li key={quiz.id} className="bg-white p-4 rounded-md shadow">
-              <h3 className="font-semibold text-blue-700">{quiz.title}</h3>
-              <p className="text-gray-600">{quiz.description}</p>
-              <p className="text-sm text-gray-500 mt-1">
+            <li key={quiz.id} className="bg-gray-700 p-4 rounded-md shadow">
+              <h3 className="font-semibold text-gray-200">{quiz.title}</h3>
+              <p className="text-gray-300">{quiz.description}</p>
+              <p className="text-sm text-gray-300 mt-1">
                 Total Marks: {quiz.totalMarks} | Duration: {quiz.duration} mins
               </p>
 
               {role === "student" && (
                 <div className="mt-3">
-                  <button className="text-blue-600 font-medium hover:underline">
+                  <button className="text-blue-500 font-medium hover:underline">
                     Take Quiz
                   </button>
                 </div>
