@@ -137,6 +137,71 @@ app.get("/api/auth/courses/:studentId", async (req, res) => {
 });
 
 
+// ===== Professor AssignmentList =====
+app.get("/api/auth/assignment/fetch/professor/:P_Id", async (req, res) => {
+  const { P_Id } = req.params;
+
+  if (!P_Id) {
+    return res.status(400).json({ message: "User Id is required" });
+  }
+
+  try {
+    const [assignments] = await db.execute(
+      `
+        SELECT a.*, c.name AS course_name, c.code AS course_code
+        FROM assignments a
+        JOIN courses c ON a.course_id = c.id
+        WHERE c.professor_id = ?
+      `,
+      [P_Id]
+    );
+
+    if (assignments.length === 0) {
+      return res.status(404).json({ message: "No assignments found for this user" });
+    }
+
+    res.json(assignments);
+
+  } catch (err) {
+    console.error("Error fetching assignments:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+// ===== Student AssignmentList =====
+app.get("/api/auth/assignment/fetch/student/:P_Id", async (req, res) => {
+  const { P_Id } = req.params;
+
+  if (!P_Id) {
+    return res.status(400).json({ message: "User Id is required" });
+  }
+
+  try {
+    const [assignments] = await db.execute(`
+      SELECT a.*
+      FROM assignments a
+      JOIN courses c ON a.course_id = c.id
+      JOIN enrollments e ON c.id = e.course_id
+      JOIN profiles p ON e.student_id = p.id
+      WHERE p.id = ?
+    `, [P_Id]);
+
+    if (assignments.length === 0) {
+      return res.status(404).json({ message: "No assignments found for this user" });
+    }
+
+    res.json(assignments);
+
+  } catch (err) {
+    console.error("Error fetching assignments:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
 // ===== CourseDetails =====
 app.get("/api/auth/courses/:id", async (req, res) => {
   try {

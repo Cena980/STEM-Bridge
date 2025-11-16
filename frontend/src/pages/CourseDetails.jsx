@@ -61,7 +61,7 @@ export default function CourseDetails() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-4 text-sm font-medium rounded-t-lg transition-colors duration-200
+              className={`py-2 px-4 text-m font-bold rounded-t-lg transition-colors duration-200
                 ${
                   activeTab === tab.id
                     ? "bg-gray-800 text-white border-b-2 border-blue-500"

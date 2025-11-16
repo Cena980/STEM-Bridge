@@ -17,7 +17,7 @@ export default function GradeTable({ courseId, role }) {
       {grades.length ? (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-gray-700 rounded-lg shadow">
-            <thead className="bg-green-900 text-white">
+            <thead className="bg-gray-600 text-white">
               <tr>
                 {role === "professor" && <th className="py-3 px-4 text-left">Student</th>}
                 <th className="py-3 px-4 text-left">Assignment</th>
