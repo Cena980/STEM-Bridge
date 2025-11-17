@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import AssignmentList from "../components/AssignmentList1";
-import CreateAssignmentModal from "../components/CreateAssignmentModal";
+import ProjectList from "../components/ProjectList1";
+import CreateProjectModal from "../components/CreateProjectModal";
 import { getCurrentUser } from "../lib/auth";
 import { Plus } from "lucide-react";
 
-export default function Assignment() {
-  const [assignment, setAssignment] = useState([]);
+export default function Project() {
+  const [Project, setProject] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const user = getCurrentUser();
   const role = user?.role || "student";
   const p_Id = user?.id || "";
-  const [newAssignment, setNewAssignment] = useState({
+  const [newProject, setNewProject] = useState({
     title: "",
     description: "",
     courseID: "",
@@ -20,69 +20,69 @@ export default function Assignment() {
     createDate: "",
   });
 
-  const fetchAssignments = async () => {
+  const fetchProjects = async () => {
   try {
     let url = "";
 
     if (role === "professor") {
-      url = `http://localhost:5000/api/auth/assignment/fetch/professor/${p_Id}`;
+      url = `http://localhost:5000/api/auth/Project/fetch/professor/${p_Id}`;
     } else if (role === "student") {
-      url = `http://localhost:5000/api/auth/assignment/fetch/student/${p_Id}`;
+      url = `http://localhost:5000/api/auth/Project/fetch/student/${p_Id}`;
     }
 
     const res = await fetch(url);
     const data = await res.json();
 
-    setAssignment(data);
+    setProject(data);
   } catch (err) {
-    console.error("Error fetching assignments:", err);
+    console.error("Error fetching Projects:", err);
   }
 };
 
   useEffect(() => {
-  fetchAssignments();
+  fetchProjects();
 }, [role, p_Id]);
 
-  const handleCreateAssignment = async (e) => {
+  const handleCreateProject = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/auth/create-assignment", {
+      const res = await fetch("http://localhost:5000/api/auth/create-Project", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newAssignment),
+        body: JSON.stringify(newProject),
       });
       if (res.ok) {
         setShowCreateModal(false);
-        setNewAssignment({ title: "", description: "", courseID: "", dueDate: "", maxPoints: "", createDate: "" });
-        fetchAssignments();
+        setNewProject({ title: "", description: "", courseID: "", dueDate: "", maxPoints: "", createDate: "" });
+        fetchProjects();
       }
     } catch (err) {
-      console.error("Error creating Assignment:", err);
+      console.error("Error creating Project:", err);
     }
   };
 
   return (
     <Layout>
       <div className="flex justify-between items-center mb-8 rounded-lg p-4">
-        <h2 className="text-3xl font-bold text-gray-200">My Assignments</h2>
+        <h2 className="text-3xl font-bold text-gray-200">My Projects</h2>
         {role === "professor" && (
           <button
             onClick={() => setShowCreateModal(true)}
             className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
           >
-            <Plus className="w-5 h-5" /> Create Assignment
+            <Plus className="w-5 h-5" /> Create Project
           </button>
         )}
       </div>
 
-      <AssignmentList assignments={assignment} />
+      <ProjectList projects={Project} />
 
-      <CreateAssignmentModal
+      <CreateProjectModal
         show={showCreateModal}
-        newAssignment={newAssignment}
-        setNewAssignment={setNewAssignment}
+        newProject={newProject}
+        setNewProject={setNewProject}
         onClose={() => setShowCreateModal(false)}
-        onSubmit={handleCreateAssignment}
+        onSubmit={handleCreateProject}
       />
     </Layout>
   );

@@ -79,11 +79,6 @@ export default function CourseCard({ course }) {
         <p className="text-sm text-white-500 mt-0">
           Code: {course.course_code} | {course.credits} Credits
         </p>
-        {role === "student" && (
-        <button onClick={handleEnroll} className="mt-4 px-4 py-2 w- bg-blue-600 rounded hover:bg-blue-700 transition">
-          Enroll
-        </button>
-        )}
       </Link>
     );
   };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import CourseList from "../components/CourseList";
+import CourseList from "../components/CourseList1";
 import CreateCourseModal from "../components/CreateCourseModal";
 import { getCurrentUser } from "../lib/auth";
 import { Plus } from "lucide-react";
@@ -29,7 +29,7 @@ export default function Dashboard() {
         } 
         else if (role === "student") {
         const studentId = user?.id || "";
-        url = `http://localhost:5000/api/auth/courses/${studentId}`;
+        url = `http://localhost:5000/api/auth/courses/student/${studentId}`;
         }
 
         const res = await fetch(url);

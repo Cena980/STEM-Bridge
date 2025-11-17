@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, Bell, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Bell, Settings, LogOut, User } from "lucide-react";
 import { getCurrentUser } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -74,11 +74,15 @@ export default function Navbar() {
             })}
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                {formData.avatar_url ? (
                 <img
-                  src={formData.avatar_url ? `http://localhost:5000${formData.avatar_url}` : "https://via.placeholder.com/150"}
+                  src={`http://localhost:5000${formData.avatar_url}`}
                   alt="Avatar"
                   className="rounded-full object-cover"
                 />
+                ) : (
+                  <User className="w-5 h-5 text-white" />
+                )}
               </div>
             </div>
           </div>

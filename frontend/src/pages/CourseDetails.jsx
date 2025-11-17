@@ -11,6 +11,7 @@ import { getCurrentUser } from "../lib/auth";
 export default function CourseDetails() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
+  const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const user = getCurrentUser();
   const role = user?.role || "student";

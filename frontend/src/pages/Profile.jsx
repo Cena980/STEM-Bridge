@@ -60,11 +60,17 @@ export default function ProfilePage() {
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           {/* Avatar Section */}
           <div className="relative hover:scale-105 transition-transform duration-300">
+            {formData.avatar_url ? (
             <img
               src={formData.avatar_url ? `http://localhost:5000${formData.avatar_url}` : "https://via.placeholder.com/150"}
               alt="Avatar"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
             />
+            ) : (
+              <div className="w-32 h-32 rounded-full bg-gray-500 flex items-center justify-center border-4 border-gray-200">
+                <User className="w-16 h-16 text-white" />
+              </div>
+            )}
             {editMode && (
               <label className="absolute bottom-2 right-2 bg-gray-600 text-white p-2 rounded-full cursor-pointer hover:bg-gray-700">
                 <Camera size={16} />

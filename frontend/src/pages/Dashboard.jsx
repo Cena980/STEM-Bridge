@@ -22,15 +22,7 @@ export default function Dashboard() {
 
     const fetchCourses = async () => {
     try {
-        let url = "";
-
-        if (role === "professor") {
-        url = "http://localhost:5000/api/auth/courses";
-        } 
-        else if (role === "student") {
-        const studentId = user?.id || "";
-        url = `http://localhost:5000/api/auth/courses/${studentId}`;
-        }
+        let url = "http://localhost:5000/api/auth/courses";
 
         const res = await fetch(url);
         const data = await res.json();

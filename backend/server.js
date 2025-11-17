@@ -92,6 +92,38 @@ app.post("/api/auth/signup", upload.single("avatar"), async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// ===== ENROLL IN COURSE =====
+
+app.post("/api/auth/enroll", async (req, res) => {
+  const { userId, courseId } = req.body;
+
+  if (!userId || !courseId) {
+    return res.status(400).json({ message: "Student ID and Course ID are required" });
+  }
+
+  try {
+    // Optional: check if already enrolled
+    const [existing] = await db.execute(
+      "SELECT * FROM enrollments WHERE student_id = ? AND course_id = ?",
+      [userId, courseId]
+    );
+    if (existing.length > 0) {
+      return res.status(400).json({ message: "Student already enrolled in this course" });
+    }
+
+    // Insert new enrollment
+    await db.execute(
+      "INSERT INTO enrollments (id, student_id, course_id, status) VALUES (?, ?, ?, ?)",
+      [uuidv4(), userId, courseId, "active"]
+    );
+
+    res.status(201).json({ message: "Enrolled successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 // ===== CourseList =====
@@ -106,7 +138,7 @@ app.get("/api/auth/courses", async (req, res) => {
 });
 
 // ===== Student CourseList =====
-app.get("/api/auth/courses/:studentId", async (req, res) => {
+app.get("/api/auth/courses/student/:studentId", async (req, res) => {
   const { studentId } = req.params;
 
   if (!studentId) {
@@ -169,6 +201,38 @@ app.get("/api/auth/assignment/fetch/professor/:P_Id", async (req, res) => {
 });
 
 
+// ===== Professor projectList =====
+app.get("/api/auth/project/fetch/professor/:P_Id", async (req, res) => {
+  const { P_Id } = req.params;
+
+  if (!P_Id) {
+    return res.status(400).json({ message: "User Id is required" });
+  }
+
+  try {
+    const [projects] = await db.execute(
+      `
+        SELECT p.*, c.title AS course_name, c.course_code AS course_code
+        FROM projects p
+        JOIN courses c ON p.course_id = c.id
+        WHERE c.professor_id = ?
+      `,
+      [P_Id]
+    );
+
+    if (projects.length === 0) {
+      return res.status(404).json({ message: "No projects found for this user" });
+    }
+
+    res.json(projects);
+
+  } catch (err) {
+    console.error("Error fetching projects:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 // ===== Student AssignmentList =====
 app.get("/api/auth/assignment/fetch/student/:P_Id", async (req, res) => {
@@ -200,13 +264,64 @@ app.get("/api/auth/assignment/fetch/student/:P_Id", async (req, res) => {
   }
 });
 
+// ===== Student ProjectList =====
+app.get("/api/auth/project/fetch/student/:P_Id", async (req, res) => {
+  const { P_Id } = req.params;
+
+  if (!P_Id) {
+    return res.status(400).json({ message: "User Id is required" });
+  }
+
+  try {
+    const [projects] = await db.execute(`
+      SELECT a.*
+      FROM projects a
+      JOIN courses c ON a.course_id = c.id
+      JOIN enrollments e ON c.id = e.course_id
+      JOIN profiles p ON e.student_id = p.id
+      WHERE p.id = ?
+    `, [P_Id]);
+
+    if (projects.length === 0) {
+      return res.status(404).json({ message: "No projects found for this user" });
+    }
+
+    res.json(projects);
+
+  } catch (err) {
+    console.error("Error fetching projects:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== CommunityList =====
+app.get("/api/auth/Community", async (req, res) => {
+
+  try {
+    const [Communitys] = await db.execute(`
+      SELECT a.full_name, a.email, a.role, a.avatar_url
+      FROM profiles a
+    `);
+
+    if (Communitys.length === 0) {
+      return res.status(404).json({ message: "No Communitys found for this user" });
+    }
+
+    res.json(Communitys);
+
+  } catch (err) {
+    console.error("Error fetching Communitys:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 // ===== CourseDetails =====
 app.get("/api/auth/courses/:id", async (req, res) => {
   try {
     const [rows] = await db.execute("SELECT * FROM courses where id = ?", [req.params.id] );
-    res.json(rows[0]);
+    res.json(rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });

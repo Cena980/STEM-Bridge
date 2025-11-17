@@ -1,6 +1,6 @@
 import React from "react";
 import { BookOpen } from "lucide-react";
-import CourseCard from "./CourseCard";
+import CourseCard from "./CourseCard1";
 
 export default function CourseList({ courses }) {
   if (!courses.length) {
