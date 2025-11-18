@@ -1,8 +1,11 @@
 import React from "react";
 import { UsersRound } from "lucide-react";
 import CommunityCard from "./CommunityCard";
+import { getCurrentUser } from "../lib/auth";
 
 export default function CommunityList({ communitys }) {
+  const currentUser = getCurrentUser();
+  const currentUserId = currentUser.id;
   if (!communitys.length) {
     return (
       <div className="text-center py-12">

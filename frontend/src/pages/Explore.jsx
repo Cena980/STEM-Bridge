@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import CourseList from "../components/CourseList1";
+import CourseList from "../components/CourseList";
 import CreateCourseModal from "../components/CreateCourseModal";
 import { getCurrentUser } from "../lib/auth";
 import { Plus } from "lucide-react";
@@ -9,28 +9,20 @@ export default function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const user = getCurrentUser();
+    const [newCourse, setNewCourse] = useState({
+      title: "",
+      code: "",
+      description: "",
+      creditHours: "",
+      professor_id: user?.id || "",
+      startDate: "",
+      endDate: ""
+    });
   const role = user?.role || "student";
-  const [newCourse, setNewCourse] = useState({
-    title: "",
-    code: "",
-    description: "",
-    creditHours: "",
-    professor_id: user?.id || "",
-    startDate: "",
-    endDate: ""
-  });
 
-      const fetchCourses = async () => {
+    const fetchCourses = async () => {
     try {
-        let url = "";
-
-        if (role === "professor") {
-        url = "http://localhost:5000/api/auth/courses";
-        } 
-        else if (role === "student") {
-        const studentId = user?.id || "";
-        url = `http://localhost:5000/api/auth/courses/student/${studentId}`;
-        }
+        let url = "http://localhost:5000/api/auth/courses";
 
         const res = await fetch(url);
         const data = await res.json();
@@ -41,11 +33,11 @@ export default function Dashboard() {
     }
     };
 
+
   useEffect(() => {
     fetchCourses();
   }, []);
-
-  const handleCreateCourse = async (e) => {
+    const handleCreateCourse = async (e) => {
     e.preventDefault();
     try {
       const res = await fetch("http://localhost:5000/api/auth/create-course", {
@@ -63,29 +55,28 @@ export default function Dashboard() {
     }
   };
 
+
   return (
     <Layout>
       <div className="flex justify-between items-center mb-8 rounded-lg p-4">
-        <h2 className="lg:text-3xl text-xl font-bold text-gray-200">My Courses</h2>
+        <h2 className="text-3xl font-bold text-gray-200">My Dashboard</h2>
         {role === "professor" && (
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-blue-600 text-white lg:px-6 px-3 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
-          >
-            <Plus className="w-5 h-5" /> Create Course
-          </button>
-        )}
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
+                  >
+                    <Plus className="w-5 h-5" /> Create Course
+                  </button>
+                )}
       </div>
-
       <CourseList courses={courses} />
-
-      <CreateCourseModal
-        show={showCreateModal}
-        newCourse={newCourse}
-        setNewCourse={setNewCourse}
-        onClose={() => setShowCreateModal(false)}
-        onSubmit={handleCreateCourse}
-      />
+        <CreateCourseModal
+            show={showCreateModal}
+            newCourse={newCourse}
+            setNewCourse={setNewCourse}
+            onClose={() => setShowCreateModal(false)}
+            onSubmit={handleCreateCourse}
+        />
     </Layout>
   );
 }

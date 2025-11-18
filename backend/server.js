@@ -443,5 +443,204 @@ app.get("/api/auth/courses/:courseId/quizzes", async (req, res) => {
   }
 });
 
+
+// Create conversation //
+app.post("/api/conversations", async (req, res) => {
+  const { user1_id, user2_email, user2_name } = req.body;
+
+  try {
+    // 1. Find the other user by email (profiles table)
+    const [otherUser] = await db.execute(
+      "SELECT id FROM profiles WHERE email = ?",
+      [user2_email]
+    );
+
+    if (otherUser.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const user2_id = otherUser[0].id;
+
+    // 2. Check if conversation already exists
+    const [existing] = await db.execute(
+      `SELECT c.conversation_id
+       FROM conversations c
+       JOIN participants p1 ON p1.conversation_id = c.conversation_id
+       JOIN participants p2 ON p2.conversation_id = c.conversation_id
+       WHERE p1.user_id = ? AND p2.user_id = ? AND c.type = 'individual'`,
+      [user1_id, user2_id]
+    );
+
+    if (existing.length > 0) {
+      return res.json({ conversation_id: existing[0].conversation_id });
+    }
+
+    // 3. Create new conversation
+    const [conv] = await db.execute(
+      `INSERT INTO conversations (type, group_name)
+       VALUES ('individual', NULL)`
+    );
+
+    const conversation_id = conv.insertId;
+
+    // 4. Insert both participants
+    await db.execute(
+      `INSERT INTO participants (conversation_id, user_id)
+       VALUES (?, ?), (?, ?)`,
+      [conversation_id, user1_id, conversation_id, user2_id]
+    );
+
+    res.json({ conversation_id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to create conversation" });
+  }
+});
+
+
+// Fetch messages for a conversation //
+app.get("/api/messages/:conversationId", async (req, res) => {
+  const { conversationId } = req.params;
+
+  try {
+    const [messages] = await db.execute(
+      `SELECT m.message_id, m.conversation_id, m.sender_id, 
+              p.full_name AS sender_name, p.avatar_url,
+              m.content, m.timestamp, m.status
+       FROM messages m
+       JOIN profiles p ON p.id = m.sender_id
+       WHERE m.conversation_id = ?
+       ORDER BY m.timestamp ASC`,
+      [conversationId]
+    );
+
+    res.json(messages);
+  } catch (error) {
+    console.error("Fetch messages error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// message controller
+app.post("/api/messages", async (req, res) => {
+  const { conversation_id, sender_id, content } = req.body;
+
+  if (!conversation_id || !sender_id || !content) {
+    return res.status(400).json({ error: "Missing fields" });
+  }
+
+  try {
+    // 1. Insert message
+    const [result] = await db.execute(
+      `INSERT INTO messages (conversation_id, sender_id, content, status)
+       VALUES (?, ?, ?, 'sent')`,
+      [conversation_id, sender_id, content]
+    );
+
+    const messageId = result.insertId;
+
+    // 2. Update conversation last snippet + updated_at
+    await db.execute(
+      `UPDATE conversations
+       SET last_message_snippet = ?, updated_at = NOW()
+       WHERE conversation_id = ?`,
+      [content.substring(0, 50), conversation_id] // store short preview
+    );
+
+    // 3. Fetch the newly inserted message (to return full structured message)
+    const [newMessage] = await db.execute(
+      `SELECT m.message_id, m.conversation_id, m.sender_id, 
+              p.full_name AS sender_name, p.avatar_url,
+              m.content, m.timestamp, m.status
+       FROM messages m
+       JOIN profiles p ON p.id = m.sender_id
+       WHERE m.message_id = ?`,
+      [messageId]
+    );
+
+    res.json(newMessage[0]);
+
+  } catch (error) {
+    console.error("Send message error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+//conversations
+app.get("/api/conversations/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const [conversations] = await db.execute(
+      `SELECT 
+          c.conversation_id,
+          c.type,
+          c.group_name,
+          c.updated_at,
+          
+          -- 🔥 Return OTHER USER for individual chats
+          CASE 
+            WHEN c.type = 'individual' THEN 
+              (SELECT user_id 
+               FROM participants 
+               WHERE conversation_id = c.conversation_id 
+               AND user_id != ? 
+               LIMIT 1)
+            ELSE NULL
+          END AS other_user_id,
+
+          p.last_seen_message_id,
+
+          -- unread count
+          (SELECT COUNT(*) 
+           FROM messages m 
+           WHERE m.conversation_id = c.conversation_id
+             AND m.message_id > p.last_seen_message_id
+             AND m.sender_id != ?) AS unread_count,
+
+          -- last message snippet
+          (SELECT content
+           FROM messages
+           WHERE conversation_id = c.conversation_id
+           ORDER BY timestamp DESC
+           LIMIT 1) AS last_message_snippet
+
+       FROM conversations c
+       JOIN participants p ON c.conversation_id = p.conversation_id
+
+       WHERE p.user_id = ?
+       ORDER BY c.updated_at DESC`,
+      [userId, userId, userId]
+    );
+
+    res.json(conversations);
+  } catch (error) {
+    console.error("Fetch conversations error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+//fetch username and avatar//
+app.get("/api/profiles/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const [conversations] = await db.execute(
+      `SELECT full_name, avatar_url
+      FROM profiles
+      WHERE id = ?`,
+      [userId]
+    );
+
+    res.json(conversations);
+  } catch (error) {
+    console.error("Fetch profile error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 // Start server
 app.listen(5000, () => console.log("Server running on http://localhost:5000"));

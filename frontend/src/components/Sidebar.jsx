@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { BookOpen, Plus, Home, User, Folder, FileText, Users, Settings, Bell, LayoutDashboard } from "lucide-react";
+import { BookOpen, Plus, Home, User, Folder, FileText, Users, Settings, Bell, LayoutDashboard, MessageCircleDashed } from "lucide-react";
 
 export default function Sidebar() {
     const [activeNav, setActiveNav] = useState("My Courses");
@@ -9,6 +9,7 @@ export default function Sidebar() {
         { name: "Courses", icon: BookOpen },
         { name: "Projects", icon: Folder },
         { name: "Assignments", icon: FileText },
+        { name: "Messages", icon: MessageCircleDashed },
         { name: "Community", icon: Users },
     ];
     return (

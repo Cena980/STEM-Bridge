@@ -64,11 +64,11 @@ export default function Project() {
   return (
     <Layout>
       <div className="flex justify-between items-center mb-8 rounded-lg p-4">
-        <h2 className="text-3xl font-bold text-gray-200">My Projects</h2>
+        <h2 className="lg:text-3xl text-xl font-bold text-gray-200">My Projects</h2>
         {role === "professor" && (
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
+            className="flex items-center gap-2 bg-blue-600 text-white lg:px-6 px-3 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
           >
             <Plus className="w-5 h-5" /> Create Project
           </button>

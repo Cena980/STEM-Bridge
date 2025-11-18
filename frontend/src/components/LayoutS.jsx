@@ -9,9 +9,8 @@ export default function Layout({ children }) {
       <Navbar />
       <div className="md:flex flex-1 min-h-[calc(100vh-<navbar-height>)]"> 
         <Sidebar />
-        <main className="flex-1 p-8 bg-slate-800 m-4 rounded-lg overflow-y-auto h-[calc(100vh-2rem)]">
+        <main className="flex-1 lg:p-8 p-4 bg-slate-800 m-4 rounded-lg overflow-y-auto h-[calc(100vh-9.5rem)]">
           {children}
-          <Footer />
         </main>
       </div>
     </div>

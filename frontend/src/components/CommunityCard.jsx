@@ -1,9 +1,12 @@
 import React from "react";
 import { Mail as mail, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getCurrentUser } from "../lib/auth";
 
 export default function CommunityCard({ Community }) {
     const firstLetter = Community.full_name.charAt(0).toUpperCase();
+    const currentUser = getCurrentUser();
+    const currentUserId = currentUser?.id || "";
 
     const colorMap = {
       A: "bg-red-500/30",
@@ -39,9 +42,30 @@ export default function CommunityCard({ Community }) {
     const actions = [
       { name: "Mail", icon: mail },
     ];
-    const handleButtonClick = (name) => {
-        navigate(`/${name}`);
-    };
+  const handleButtonClick = async (action) => {
+    if (action !== "Mail") return;
+    try {
+      const res = await fetch("http://localhost:5000/api/conversations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user1_id: currentUserId,
+          user2_email: Community.email,
+          user2_name: Community.full_name
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.conversation_id) {
+        navigate(`/messages/${data.conversation_id}`);
+      }
+
+    } catch (error) {
+      console.error("Error creating conversation:", error);
+    }
+  };
+
 
     return (
       <div
@@ -60,15 +84,16 @@ export default function CommunityCard({ Community }) {
           
         </div>
         <div>
-          <p className="text-gray-300 font-bold font-sans">Name: <span className="text-gray-200 font-semibold">{Community.full_name} </span></p>
+          <p className="text-gray-300 font-bold font-sans"><span className="text-gray-200 font-semibold">{Community.full_name} </span></p>
           <p className="text-gray-300 font-bold font-sans mb-1">Email: <span className="text-gray-200 font-semibold">{Community.email}</span></p>
+          <p className="text-gray-300 font-bold font-sans mb-1">Role: <span className="text-gray-200 font-semibold">{Community.role}</span></p>
         </div>
         {actions.map((item) => {
           const IconComponent = item.icon;
           return (
             <button
               key={item.name}
-              onClick={() => handleButtonClick(item.name)}
+              onClick={handleButtonClick(item.name, Community)}
               className="flex ml-4 items-center bg-transparent text-gray-200 hover:text-blue-600 transition-colors"
               title={`${item.name} ${Community.full_name}`}
             >

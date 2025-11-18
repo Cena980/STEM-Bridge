@@ -5,6 +5,8 @@ import Assignments from './pages/Assignments';
 import Projects from './pages/Projects';
 import Community from './pages/Community';
 import Dashboard from './pages/Dashboard';
+import Explore from './pages/Explore';
+import Messages from './pages/MessagePage';
 import CourseDetails from "./pages/CourseDetails";
 import Profile from "./pages/Profile";
 
@@ -21,6 +23,8 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/community" element={<Community />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/messages" element={<Messages />} />
           <Route path="/courses/:id" element={<CourseDetails />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
