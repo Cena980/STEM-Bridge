@@ -1,3 +1,4 @@
+import { User } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 export default function ConversationsList({
@@ -29,7 +30,7 @@ export default function ConversationsList({
   }, [conversations]);
 
   return (
-    <div className="p-4 shadow-md rounded-lg bg-gray-700">
+    <div className="p-4 shadow-md rounded-lg bg-slate-800">
       {conversations.map(conv => {
         const otherId = getOtherUserId(conv);
         const otherUser = usersCache[otherId];
@@ -38,23 +39,25 @@ export default function ConversationsList({
           <div
             key={conv.conversation_id}
             onClick={() => onSelectConversation(conv)}
-            className={`flex items-center justify-between border-b rounded-t-lg transition-all duration-300 p-3 hover:bg-gray-800 cursor-pointer ${
+            className={`flex items-center justify-between border-b rounded-t-lg transition-all duration-300 p-1 lg:p-3 hover:bg-gray-800 cursor-pointer ${
               selectedConv?.conversation_id === conv.conversation_id
                 ? "bg-gray-700"
                 : ""
             }`}
           >
             <div className="flex items-center space-x-3">
-              {otherUser && (
+              {otherUser ? (
                 <img
                   src={`http://localhost:5000${otherUser.avatar_url}`}
-                  alt={otherUser.full_name}
-                  className="w-10 h-10 rounded-full"
+                  alt="Avatar"
+                  className="rounded-full w-5 h-5 lg:w-10 lg:h-10"
                 />
-              )}
+                ) : (
+                  <User className="w-5 h-5 lg:w-10 lg:h-10 text-gray-400" />
+                )}
 
               <div>
-                <p className="text-white font-semibold">
+                <p className="text-white text-sm lg:text-m font-semibold">
                   {conv.type === "group"
                     ? conv.group_name
                     : otherUser?.full_name || "Chat"}

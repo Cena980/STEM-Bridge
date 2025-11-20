@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, Bell, Settings, LogOut, User } from "lucide-react";
+import { Bell, Settings, LogOut, User } from "lucide-react";
 import { getCurrentUser } from "../lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -34,7 +34,6 @@ export default function Navbar() {
   }, []);
   const role = user?.role || "student";
   const topNavItems = [
-    { name: "Dashboard", icon: LayoutDashboard },
     { name: "Notifications", icon: Bell },
     { name: "Settings", icon: Settings },
     { name: "Sign Out", icon: LogOut },

@@ -71,7 +71,7 @@ const handleSelectConversation = (conv) => {
 
   return (
     <Layout>
-      <div className="flex justify-start gap-2 items-center mb-2 rounded-lg p-4 pb-0">
+      <div className="flex justify-start gap-2 items-center mb-4 rounded-lg p-2 pb-0">
         <MessageCircleDashed className="text-gray-200"/>
         <h2 className="text-2xl font-bold text-gray-200">Conversations</h2>
       </div>

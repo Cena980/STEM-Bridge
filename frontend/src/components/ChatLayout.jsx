@@ -31,9 +31,9 @@ export default function ChatLayout({
   }, [getOtherUser]);
 
   return (
-    <div className="lg:flex lg:h-[calc(100vh-12rem)] shadow-md shadow-gray-400 lg:rounded-lg bg-gray-800">
+    <div className="lg:flex lg:h-[calc(100vh-16rem)] shadow-md shadow-gray-400 lg:rounded-lg bg-gray-800">
       {/* Sidebar */}
-      <div className="min-w-6 h-60 lg:h-auto border-r border-gray-700 overflow-y-auto">
+      <div className="min-w-6 h-56 lg:h-auto border-r border-gray-700 overflow-y-auto">
         <ConversationsList
           conversations={conversations}
           currentUser={currentUser}
@@ -41,24 +41,8 @@ export default function ChatLayout({
           selectedConv={selectedConv}
         />
       </div>
-
-      {/* Chat Window */}
-      <div className="flex-1 flex flex-col">
-
-        {/* SELECTED USER HEADER */}
-        {otherUser && (
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-700 bg-gray-900">
-            <img
-              src={`http://localhost:5000/${otherUser.avatar_url}`}
-              alt={otherUser.full_name}
-              className="w-10 h-10 rounded-full"
-            />
-            <p className="text-gray-200 font-semibold">{otherUser.full_name}</p>
-          </div>
-        )}
-
-        {/* Messages */}
-        <div className="flex-1">{children}</div>
+      <div className="flex-1 flex flex-col h-96 lg:h-full">
+        <div className="flex-1 overflow-y-auto">{children}</div>
       </div>
     </div>
   );
