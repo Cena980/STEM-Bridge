@@ -44,9 +44,9 @@ export default function CourseDetails() {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
+      <div className="w-4xl lg:max-w-7xl mx-auto">
         <div className="mb-8 border-b pb-4">
-          <h1 className="text-4xl font-bold text-gray-200">{course.title}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-200">{course.title}</h1>
           <p className="text-gray-200 mt-2">{course.description}</p>
           <p className="text-sm text-gray-200 mt-1">
             Code: {course.course_code} | {course.credits} Credits
@@ -57,12 +57,12 @@ export default function CourseDetails() {
           <ManageTools courseId={id} />
         )}
         {/* Tabs Navigation */}
-        <div className="flex space-x-4 border-b border-gray-700 mb-6">
+        <div className="flex space-x-0 md:space-x-4 border-b border-gray-700 mb-6">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-4 text-m font-bold rounded-t-lg transition-colors duration-200
+              className={`py-2 px-4 text-sm md:text-m font-bold rounded-t-lg transition-colors duration-200
                 ${
                   activeTab === tab.id
                     ? "bg-gray-800 text-white border-b-2 border-blue-500"
