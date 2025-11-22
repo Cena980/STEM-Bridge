@@ -29,8 +29,8 @@ export default function ChatWindow({ messages, currentUser }) {
   }, [messages, currentUser]);
   
   return (
-    <div className="flex flex-col h-96 lg:h-full">
-      <div className="inline-flex fixed w-full space-x-4 h-14 py-2 px-4 bg-slate-900">
+    <div className="flex flex-col sm:max-h-[calc(100vh-27rem)] md:max-h-[calc(100vh-26rem)] lg:max-h-[calc(100vh-21rem)]">
+      <div className="inline-flex w-full space-x-4 h-14 py-2 px-4 bg-slate-900">
         {/* Avatar */}
         {avatar ? (
           <img

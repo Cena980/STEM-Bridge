@@ -41,7 +41,7 @@ export default function ChatLayout({
           selectedConv={selectedConv}
         />
       </div>
-      <div className="flex-1 flex flex-col h-96 lg:h-full">
+      <div className="flex-1 flex flex-col min-h-96 lg:h-full">
         <div className="flex-1 overflow-y-auto">{children}</div>
       </div>
     </div>

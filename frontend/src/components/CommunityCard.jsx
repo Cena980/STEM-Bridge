@@ -43,6 +43,7 @@ export default function CommunityCard({ Community }) {
       { name: "Mail", icon: mail },
     ];
   const handleButtonClick = async (action) => {
+    
     if (action !== "Mail") return;
     try {
       const res = await fetch("http://localhost:5000/api/conversations", {
@@ -93,7 +94,7 @@ export default function CommunityCard({ Community }) {
           return (
             <button
               key={item.name}
-              onClick={handleButtonClick(item.name, Community)}
+              onClick={()=> handleButtonClick(item.name, Community)}
               className="flex ml-4 items-center bg-transparent text-gray-200 hover:text-blue-600 transition-colors"
               title={`${item.name} ${Community.full_name}`}
             >

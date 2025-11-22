@@ -10,7 +10,7 @@ export default function MessageInput({ onSend }) {
   };
 
   return (
-    <div className="flex p-4 border-t border-gray-700">
+    <div className="flex p-4 max-w-calc(screen-<2rem>) border-t border-gray-700">
       <input
         type="text"
         value={text}
