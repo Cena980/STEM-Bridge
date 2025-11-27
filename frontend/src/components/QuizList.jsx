@@ -20,23 +20,26 @@ export default function QuizList({ courseId, role }) {
               <h3 className="font-semibold text-gray-200">{quiz.title}</h3>
               <p className="text-gray-300">{quiz.description}</p>
               <p className="text-sm text-gray-300 mt-1">
-                Total Marks: {quiz.totalMarks} | Duration: {quiz.duration} mins
+                Total Marks: {quiz.max_points} | Duration: {quiz.time_limit} mins
               </p>
 
               {role === "student" && (
                 <div className="mt-3">
-                  <button className="text-blue-500 font-medium hover:underline">
+                  <button className="text-blue-500 font-medium hover:underline"
+                  onClick={() => window.location.href = `/student/quizzes/${quiz.id}`}>
                     Take Quiz
                   </button>
                 </div>
               )}
 
               {role === "professor" && (
-                <div className="mt-3 flex gap-3">
-                  <button className="text-green-600 font-medium hover:underline">Edit</button>
-                  <button className="text-red-600 font-medium hover:underline">Delete</button>
-                </div>
-              )}
+                    <button
+                      onClick={() => window.location.href = `/professor/quizes/${quiz.id}/submissions`}
+                      className="mt-2 inline-block bg-blue-500 text-white px-3 py-1 rounded"
+                    >
+                      View Submissions
+                    </button>
+                  )}
             </li>
           ))}
         </ul>

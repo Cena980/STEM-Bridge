@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "node server.js",
+    "nodemon": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "express": "^5.1.0",
     "multer": "^2.0.2",
     "mysql2": "^3.15.3",
+    "nodemon": "^3.1.11",
     "uuid": "^13.0.0"
   }
 }

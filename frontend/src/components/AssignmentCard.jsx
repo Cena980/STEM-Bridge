@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { getCurrentUser } from "../lib/auth";
 
 export default function AssignmentCard({ assignment }) {
+    const user = getCurrentUser();
+    const role = user?.role || "student";
     const firstLetter = assignment.title.charAt(0).toUpperCase();
-
     const colorMap = {
       A: "bg-red-500/30",
       B: "bg-orange-500/30",
@@ -37,8 +39,9 @@ export default function AssignmentCard({ assignment }) {
     const bgColor = colorMap[firstLetter] || "bg-gray-500"; // default
 
     return (
+      <div>
       <Link
-        to={`/assignments/${assignment.id}`}
+        to={`/student/assignments/${assignment.id}`}
         className={`block p-4 no-underline text-white rounded-lg shadow transform transition-transform duration-300 hover:scale-[1.02]  ${bgColor}`}
       >
         <h3 className="text-xl font-semibold">{assignment.title}</h3>
@@ -46,6 +49,18 @@ export default function AssignmentCard({ assignment }) {
         <p className="text-sm text-white-500 mt-0">
           Points: {assignment.max_points} | Due at: {assignment.due_date}
         </p>
+        
       </Link>
+      {role === "professor" && (
+          <button
+            onClick={() => window.location.href = `/professor/assignments/${assignment.id}/submissions`}
+            className="mt-2 inline-block bg-blue-500 text-white px-3 py-1 rounded"
+          >
+            View Submissions
+          </button>
+        )}
+        </div>
+
+      
     );
   };

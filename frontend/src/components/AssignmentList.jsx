@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function AssignmentList({ courseId, role }) {
   const [assignments, setAssignments] = useState([]);
@@ -22,7 +23,17 @@ export default function AssignmentList({ courseId, role }) {
               <p className="text-sm text-gray-300 mt-1">Due: {a.due_date}</p>
               <p className="text-sm text-gray-300 mt-1">Points: {a.max_points}</p>
               {role === "student" && (
-                <button className="mt-2 text-blue-400 font-medium hover:underline">Submit</button>
+                <button className="mt-2 text-blue-400 font-medium hover:underline" 
+                onClick={() => window.location.href = `/student/assignments/${a.id}`}>
+                  Submit</button>
+              )}
+              {role === "professor" && (
+                <Link
+                  to={`/professor/assignments/${a.id}/submissions`}
+                  className="mt-2 inline-block bg-blue-500 text-white px-3 py-1 rounded"
+                >
+                  View Submissions
+                </Link>
               )}
             </li>
           ))}

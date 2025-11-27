@@ -2,7 +2,7 @@ import React from "react";
 import { NotebookText } from "lucide-react";
 import AssignmentCard from "./AssignmentCard";
 
-export default function AssignmentList({ assignments }) {
+export default function AssignmentList({ assignments, role }) {
   if (!assignments.length) {
     return (
       <div className="text-center py-12">

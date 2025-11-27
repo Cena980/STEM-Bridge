@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
-import mysql from "mysql2/promise";
+const router = "express.Router()";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -9,15 +9,24 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 
 import { db } from "./db.js";
+import submissionsRoutes from "./routes/submissions.js";
+import detailsRoutes from "./routes/detailsRoutes.js";
+
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static("uploads"));
+app.use("/api/submissions", submissionsRoutes);
+app.use("/api", detailsRoutes);
 
 
 // Set up storage for avatars
@@ -169,6 +178,76 @@ app.get("/api/auth/courses/student/:studentId", async (req, res) => {
 });
 
 
+// Create assignment, project, and quiz
+// ===== CREATE ASSIGNMENT ===== //
+app.post("/api/auth/assignments/create", async (req, res) => {
+  const { courseId, title, description, max_points, due_date } = req.body;
+
+  if (!courseId || !title) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+  const id = uuidv4();
+
+  try {
+    await db.execute(
+      "INSERT INTO assignments (id, course_id, title, description,max_points, due_date) VALUES (?, ?, ?, ?,?,?)",
+      [id, courseId, title, description,max_points, due_date]
+    );
+
+    res.json({ message: "Assignment created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error creating assignment" });
+  }
+});
+
+//Create project
+app.post("/api/auth/projects/create", async (req, res) => {
+  const { courseId, title, max_points, description, due_date } = req.body;
+
+  if (!courseId || !title) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+  const id = uuidv4();
+
+  try {
+    await db.execute(
+      "INSERT INTO projects (id, course_id, title, description,max_points, due_date) VALUES (?, ?, ?, ?, ?,?)",
+      [id,courseId, title, description, max_points, due_date]
+    );
+
+    res.json({ message: "Project created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error creating project" });
+  }
+});
+
+
+// create quiz
+app.post("/api/auth/quizzes/create", async (req, res) => {
+  const { courseId, title, description, time_limit, available_from, due_date } = req.body;
+
+  if (!courseId || !title) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+  const id = uuidv4();
+  const available_from1 = available_from.replace("T", " ") + ":00";
+  const available_until = due_date.replace("T", " ") + ":00";
+
+  try {
+    await db.execute(
+      "INSERT INTO quizzes (id, course_id, title, description, time_limit, available_from, available_until) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [id, courseId, title, description, time_limit, available_from1, available_until]
+    );
+    res.json({ message: "Quiz created successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error creating quiz" });
+  }
+});
+
+
 // ===== Professor AssignmentList =====
 app.get("/api/auth/assignment/fetch/professor/:P_Id", async (req, res) => {
   const { P_Id } = req.params;
@@ -180,7 +259,7 @@ app.get("/api/auth/assignment/fetch/professor/:P_Id", async (req, res) => {
   try {
     const [assignments] = await db.execute(
       `
-        SELECT a.*, c.name AS course_name, c.code AS course_code
+        SELECT a.*, c.title AS course_name, c.course_code AS course_code
         FROM assignments a
         JOIN courses c ON a.course_id = c.id
         WHERE c.professor_id = ?
@@ -381,19 +460,59 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 // GradeTable
-app.get("/api/auth/courses/:courseId/grades", async (req, res) => {
-  const { courseId } = req.params;
+// GET /api/grades?courseId=1&itemType=assignment
+app.get("/api/grades", async (req, res) => {
+  const { courseId, itemType } = req.query;
+
+  if (!courseId || !itemType) {
+    return res.status(400).json({ message: "Missing courseId or itemType" });
+  }
+
   try {
+    // Fetch all submissions with grades for this course and item type
     const [rows] = await db.execute(
-      `SELECT * from courses where id = ?`,
-      [courseId]
+      `SELECT s.id, s.student_id, u.full_name AS student_name, s.item_type, s.item_id, s.grade, s.feedback
+       FROM submissions s
+       JOIN profiles u ON s.student_id = u.id
+       WHERE s.course_id = ? AND s.item_type = ?`,
+      [courseId, itemType]
     );
+
     res.json(rows);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// GET /api/courses/:courseId/grades
+app.get("/api/courses/:courseId/grades", async (req, res) => {
+  const { courseId } = req.params;
+
+  try {
+    const [rows] = await db.execute(
+      `SELECT 
+         u.id AS student_id,
+         u.full_name AS studentName,
+         SUM(CASE WHEN s.item_type='assignment' THEN s.grade END) AS assignmentGrade,
+         SUM(CASE WHEN s.item_type='project' THEN s.grade END) AS projectGrade,
+         SUM(CASE WHEN s.item_type='quiz' THEN s.grade END) AS quizGrade,
+         SUM(s.grade) AS total
+       FROM submissions s
+       JOIN profiles u ON s.student_id = u.id
+       WHERE s.course_id = ?
+       GROUP BY u.id, u.full_name`,
+      [courseId]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 // AssignmentList
 app.get("/api/auth/courses/:courseId/assignments", async (req, res) => {

@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { getCurrentUser } from "../lib/auth";
 
 export default function ProjectCard({ Project }) {
+    const user = getCurrentUser();
+    const role = user?.role || "student";
     const firstLetter = Project.title.charAt(0).toUpperCase();
 
     const colorMap = {
@@ -37,8 +40,9 @@ export default function ProjectCard({ Project }) {
     const bgColor = colorMap[firstLetter] || "bg-gray-500"; // default
 
     return (
+      <div>
       <Link
-        to={`/Projects/${Project.id}`}
+        to={`/student/projects/${Project.id}`}
         className={`block p-4 no-underline text-white rounded-lg shadow transform transition-transform duration-300 hover:scale-[1.02]  ${bgColor}`}
       >
         <h3 className="text-xl font-semibold">{Project.title}</h3>
@@ -47,5 +51,14 @@ export default function ProjectCard({ Project }) {
           Points: {Project.max_points} | Due at: {Project.due_date}
         </p>
       </Link>
+      {role === "professor" && (
+          <button
+            onClick={() => window.location.href = `/professor/projects/${Project.id}/submissions`}
+            className="mt-2 inline-block bg-blue-500 text-white px-3 py-1 rounded"
+          >
+            View Submissions
+          </button>
+        )}
+        </div>
     );
   };

@@ -4,7 +4,7 @@ export default function GradeTable({ courseId, role }) {
   const [grades, setGrades] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/auth/courses/${courseId}/grades`)
+    fetch(`http://localhost:5000/api/courses/${courseId}/grades`)
       .then(res => res.json())
       .then(data => setGrades(data))
       .catch(err => console.error("Error fetching grades:", err));
@@ -28,14 +28,16 @@ export default function GradeTable({ courseId, role }) {
             </thead>
             <tbody>
               {grades.map((g, i) => (
+                console.log(g) ||
                 <tr key={i} className="border-t">
                   {role === "professor" && (
-                    <td className="py-2 px-4 text-gray-800">{g.studentName}</td>
+                    <td className="py-2 px-4 text-gray-200">{g.studentName}</td>
                   )}
+                  
                   <td className="py-2 px-4 text-gray-300">{g.assignmentGrade ?? "-"}</td>
                   <td className="py-2 px-4 text-gray-300">{g.projectGrade ?? "-"}</td>
                   <td className="py-2 px-4 text-gray-300">{g.quizGrade ?? "-"}</td>
-                  <td className="py-2 px-4 font-semibold text-blue-700">{g.total ?? "-"}</td>
+                  <td className="py-2 px-4 font-semibold text-blue-300">{g.total ?? "-"}</td>
                 </tr>
               ))}
             </tbody>

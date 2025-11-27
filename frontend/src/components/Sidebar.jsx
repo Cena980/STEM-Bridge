@@ -1,8 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { BookOpen, User, Folder, FileText, Users, LayoutDashboard, MessageCircleDashed } from "lucide-react";
+import { getCurrentUser } from "../lib/auth";
 
 export default function Sidebar() {
+    const user = getCurrentUser();
+    const role = user?.role || "student";
     const [activeNav, setActiveNav] = useState("My Courses");
     const location = useLocation();
     const navItems = [
@@ -14,11 +17,9 @@ export default function Sidebar() {
         { name: "Messages", icon: MessageCircleDashed },
         { name: "Community", icon: Users },
     ];
-    useEffect(() => {
-        // Extract first part of pathname (e.g. "/courses" → "courses")
-        const currentPath = location.pathname.split("/")[1];
 
-        // Find matching nav item
+    useEffect(() => {
+        const currentPath = location.pathname.split("/")[1];
         const match = navItems.find(
             (item) => item.name.toLowerCase() === currentPath
         );
