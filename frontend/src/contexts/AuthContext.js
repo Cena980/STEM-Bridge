@@ -17,7 +17,8 @@ export function AuthProvider({ children }) {
   const signIn = async (email, password) => {
     const { user: loggedInUser, error } = await authSignIn(email, password);
     if (loggedInUser) setUser(loggedInUser);
-    return { error };
+    console.log("Logged in user:", loggedInUser);
+    return { user: loggedInUser, error };
   };
 
   const signUp = async (email, password, fullName, role) => {

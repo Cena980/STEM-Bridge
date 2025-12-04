@@ -31,6 +31,7 @@ export async function signUp(email, password, fullName, role) {
 
 export function signOut() {
   localStorage.removeItem("token");
+  localStorage.removeItem("user");
 }
 
 export function getCurrentUser() {

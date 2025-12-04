@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LogIn, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+
 
 
 export default function AuthPage() {
@@ -23,30 +25,23 @@ function LoginForm({ onToggleMode }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user, signIn } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      console.log("Login success!", data);
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.message);
-    } finally {
+    const {user, error} = await signIn(email, password);
+    if (error) {
+      setError(error);
       setLoading(false);
+      return;
+    }
+    console.log("User after sign in:", user);
+
+    if (user) {
+      navigate("/Dashboard");
     }
   };
 
@@ -95,45 +90,32 @@ function LoginForm({ onToggleMode }) {
     </div>
   );
 }
+
 function SignUpForm({ onToggleMode }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
-  const [avatar, setAvatar] = useState(null); // new state for avatar
+  const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { signUp } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    try {
-      const formData = new FormData();
-      formData.append("fullName", fullName);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("role", role);
-      if (avatar) formData.append("avatar", avatar);
+    const result = await signUp(email, password, fullName, role); // 👈 AuthContext
 
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
-        body: formData, // send as FormData
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Sign up failed");
-
-      localStorage.setItem("token", data.token);
-      console.log("Sign up success!", data);
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.message);
-    } finally {
+    if (result.error) {
+      setError(result.error);
       setLoading(false);
+      return;
     }
+
+    navigate("/dashboard");
   };
 
   return (
