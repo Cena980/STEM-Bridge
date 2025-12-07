@@ -29,22 +29,22 @@ export default function Sidebar() {
         }
     }, [location.pathname]);
     return (
-        <div className="md:w-64 bg-slate-800 m-4 p-4 rounded-lg max-h-78">
+        <div className="text-[10pt] left-0 w-40 bg-gradient-to-r from-sky-950 to-cyan-900 p-2">
           <nav className="">
             <ul className="p-0 grid grid-cols-1 md:grid-cols-1 gap-1">
               {navItems.map((item) => {
                 const IconComponent = item.icon;
                 return (
-                  <ul key={item.name} className="mx-6 md:mx-auto border-b-2 border-gray-400 hover:scale-105 transition-transform w-auto md:w-48">
+                  <ul key={item.name} className="border-b-[1pt] border-sky-500 hover:scale-103 transition-transform">
                     <Link to={`/${item.name.toLowerCase()}`}
                       onClick={() => setActiveNav(item.name)}
-                      className={`flex no-underline items-center p-1 md:px-6 md:py-3 text-left transition-colors ${
+                      className={`flex p-1 no-underline items-center md:py-3 text-left transition-all ${
                         activeNav === item.name
-                          ? "text-white text-l font-extrabold pl-6 scale-[1.02] bg-gray-700"
-                          : "text-gray-200 font-bold hover:scale-105 transition-all duration-300 hover:bg-gray-700"
+                          ? "text-white text-[11pt] font-extrabold scale-[1.02] bg-sky-900"
+                          : "text-gray-200 font-bold hover:scale-105 transition-all duration-300 hover:bg-sky-700"
                       }`}
                     >
-                      <IconComponent className=" w-5 h-5 mr-3" />
+                      <IconComponent className=" w-4 h-4 mr-2" />
                       <span className="md:inline">{item.name}</span>
                     </Link>
                   </ul>

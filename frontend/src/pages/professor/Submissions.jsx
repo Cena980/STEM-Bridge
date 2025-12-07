@@ -37,24 +37,25 @@ export default function ProfessorSubmissions({ itemType }) {
       alert("Error grading submission");
     }
   };
+    
 
   return (
-    <div className="flex text-gray-600 flex-col gap-2">
+    <div className="flex text-gray-100 flex-col gap-2">
       <input
         type="number"
         placeholder="Grade"
         value={grade}
         onChange={(e) => setGrade(e.target.value)}
-        className="border p-1 w-20"
+        className="border border-sky-400 rounded-lg bg-sky-900 p-2 w-20"
       />
       <input
         type="text"
         placeholder="Feedback"
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
-        className="border p-1"
+        className="border border-sky-400 rounded-lg bg-sky-900 p-2"
       />
-      <button onClick={handleSubmit} className="bg-blue-500 text-white px-2 py-1 rounded">
+      <button onClick={handleSubmit} className="bg-sky-500  text-white p-2 rounded-lg hover:bg-sky-600 transition-colors duration-300">
         Submit
       </button>
     </div>
@@ -64,15 +65,18 @@ export default function ProfessorSubmissions({ itemType }) {
 
   return (
     <Layout>
-  <div className="sm:max-w-[calc(100%-4rem)] md:max-w-[calc(100%-4rem)]">
-    <h2 className="text-2xl text-gray-200 font-bold mb-4">Student Submissions</h2>
+  <div className="sm:max-w-[calc(100%-4rem)] md:max-w-[100%]">
+    <div className="p-4 my-4 border-sky-300 border-[0.5pt] bg-sky-800 rounded-lg">
+      <h2 className="text-2xl text-gray-200 font-bold">Student Submissions</h2>
+    </div>
 
     {loading ? (
       <p>Loading...</p>
+    
     ) : (
       <div className="grid gap-4">
         {submissions.map((s) => (
-          <div key={s.id} className="border border-gray-700 rounded-lg p-4 bg-gray-800 shadow">
+          <div key={s.id} className="border-sky-300 border-[0.5pt] bg-sky-800 rounded-lg p-4 shadow">
             <p className="text-gray-400">
               <span className="font-semibold text-gray-300 mb-2 text-gray-300 mb-2 text-gray-300 text-gray-300">Student:</span> {s.student_name}
             </p>

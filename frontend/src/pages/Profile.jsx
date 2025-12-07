@@ -51,11 +51,11 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-    <div className="flex justify-between items-center mb-8 rounded-lg p-4">
+    <div className="flex justify-between items-center mb-4 border-sky-600 border-[0.5pt] bg-sky-800 rounded-lg p-4">
         <h2 className="text-3xl font-bold text-gray-200">My Profile</h2>
     </div>
 
-    <div className="bg-gray-700 rounded-lg p-8">
+    <div className="bg-sky-800 border-sky-600 border-[0.5pt] rounded-lg p-8">
       <div className="max-w-6xl">
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           {/* Avatar Section */}
@@ -92,50 +92,48 @@ export default function ProfilePage() {
               </h2>
               <button
                 onClick={() => setEditMode(!editMode)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-500 transition-colors duration-300"
+                className="flex items-center border-[1pt] border-sky-700 gap-2 px-3 py-1.5 bg-sky-900 text-gray-300 rounded-lg hover:bg-sky-800 transition-colors duration-300"
               >
                 {editMode ? <Save size={16} /> : <Edit3 size={16} />}
                 {editMode ? "Save" : "Edit"}
               </button>
             </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center gap-7">
-                <User size={18} className="text-gray-300" />
+            <div className="space-y-3 text-xl">
+              <div className="flex border-sky-600 border-[0.5pt] p-2 rounded-lg bg-sky-900 items-center gap-7">
+                
                 {editMode ? (
                   <input
                     name="name"
                     value={formData.full_name}
                     onChange={handleChange}
-                    className="border rounded px-2 py-1 w-full"
+                    className="border bg-sky-900 text-white rounded px-2 py-1 w-full"
                   />
                 ) : (
                   <span className="text-gray-300">{formData.full_name}</span>
                 )}
               </div>
-
-              <div className="flex items-center gap-7">
-                <Mail size={18} className="text-gray-300" />
+              <div className="flex border-sky-600 border-[0.5pt] p-2 rounded-lg bg-sky-900 items-center gap-7">
                 {editMode ? (
                   <input
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="border rounded px-2 py-1 w-full"
+                    className="border bg-sky-900 text-white rounded px-2 py-1 w-full"
                   />
                 ) : (
                   <span className="text-gray-300">{formData.email}</span>
                 )}
               </div>
 
-              <div className="flex items-center gap-3">
-                <span className="font-medium text-gray-300">Role:</span>
+              <div className="flex border-sky-600 border-[0.5pt] p-2 rounded-lg bg-sky-900 items-center gap-3">
+                
                 {editMode ? (
                   <select
                     name="role"
                     value={formData.role}
                     onChange={handleChange}
-                    className="border rounded px-2 py-1 w-full"
+                    className="border rounded bg-sky-900 text-white px-2 py-1 w-full"
                   >
                     <option value="Student">Student</option>
                     <option value="Professor">Professor</option>
@@ -146,14 +144,13 @@ export default function ProfilePage() {
                 )}
               </div>
 
-              <div>
-                <p className="font-medium font-semibold text-gray-300 mb-1">Bio</p>
+              <div className=" border-sky-600 border-[0.5pt] p-2 rounded-lg bg-sky-900">
                 {editMode ? (
                   <textarea
                     name="bio"
                     value={formData.bio}
                     onChange={handleChange}
-                    className="border rounded px-3 py-2 w-full"
+                    className="border rounded bg-sky-900 text-white px-3 py-2 w-full"
                     rows={3}
                   />
                 ) : (

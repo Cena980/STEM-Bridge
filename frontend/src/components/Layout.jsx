@@ -5,11 +5,11 @@ import Footer from "./Footer";
 
 export default function Layout({ children }) {
   return (
-    <div className="grid bg-gray-900 min-h-screen">
+    <div className="grid bg-blue-950 min-h-screen">
       <Navbar />
       <div className="md:flex flex-1 min-h-[calc(100vh-<navbar-height>)]"> 
         <Sidebar />
-        <main className="flex flex-col sm:max-w-[calc(screen-2rem)] md:w-auto flex-1 py-4 px-3 md:p-8 bg-slate-800 m-4 rounded-lg overflow-y-auto h-[calc(100vh-9rem)]">
+        <main className="flex flex-col sm:max-w-[calc(screen-2rem)] md:w-auto flex-1 py-4 px-3 md:p-4 overflow-y-auto h-[calc(100vh-4rem)]">
           <div className="flex-1">
             {children}
           </div>

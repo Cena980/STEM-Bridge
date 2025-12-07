@@ -63,7 +63,7 @@ export default function Assignment() {
 
   return (
     <Layout>
-      <div className="flex justify-between items-center mb-8 rounded-lg lg:p-4 p-3">
+      <div className="flex justify-between bg-sky-800 border-[0.5pt] border-sky-400 items-center my-4 rounded-lg lg:p-4 p-3">
         <h2 className="lg:text-3xl text-l font-bold text-gray-200">My Assignments</h2>
         {role === "professor" && (
           <button

@@ -63,7 +63,7 @@ export default function Project() {
 
   return (
     <Layout>
-      <div className="flex justify-between items-center mb-8 rounded-lg p-4">
+      <div className="flex justify-between items-center mb-4 bg-sky-800 border-sky-600 border-[0.5pt] rounded-lg p-4">
         <h2 className="lg:text-3xl text-xl font-bold text-gray-200">My Projects</h2>
         {role === "professor" && (
           <button

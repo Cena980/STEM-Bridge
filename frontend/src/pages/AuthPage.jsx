@@ -47,7 +47,7 @@ function LoginForm({ onToggleMode }) {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-gray-700 rounded-lg shadow-lg p-8">
+      <div className="bg-gradient-to-r from-gray-900 via-teal-950 to-cyan-900 rounded-lg shadow-lg p-8">
         <div className="flex items-center justify-center mb-6">
           <LogIn className="w-12 h-12 text-blue-600" />
         </div>

@@ -3,8 +3,8 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="max-w-screen m-4 bg-slate-800 rounded-lg text-gray-300 px-6 mt-6">
-      <div className="border-t border-gray-700 mb-4 text-center text-sm text-gray-500">
+    <footer className="max-w-screen bottom-0 text-gray-300 px-6 mt-6">
+      <div className="border-t border-sky-600 mb-4 text-center text-sm text-gray-500">
       </div>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
         {/* Logo & About */}
@@ -25,7 +25,6 @@ export default function Footer() {
             <li><a href="/contact" className="hover:text-white transition no-underline text-gray-400">Contact</a></li>
           </ul>
         </div>
-
         {/* Social Media */}
         <div>
           <h3 className="text-lg font-semibold text-gray-300 mb-3">Follow Us</h3>
@@ -38,7 +37,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-700 mt-4 text-center text-sm text-gray-500">
+      <div className="border-t border-sky-600 mt-4 text-center text-sm text-gray-500">
         © {new Date().getFullYear()} STEM Bridge. All rights reserved.
       </div>
     </footer>

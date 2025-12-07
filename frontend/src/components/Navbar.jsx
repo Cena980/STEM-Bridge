@@ -52,7 +52,7 @@ export default function Navbar() {
   };
 
   return (
-      <div className="bg-slate-800 max-h-20 m-4 rounded-lg">
+      <div className="bg-slate-800 max-h-20 bg-gradient-to-b from-sky-950 via-teal-900 to-cyan-900">
         <div className="flex justify-between items-center px-8 py-4">
           <div className="justify-start">
             <h1 className="text-xl font-bold text-white">STEM Bridge</h1>

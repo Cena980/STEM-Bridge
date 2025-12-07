@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
-const router = "express.Router()";
+const router = express.Router();
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -132,6 +132,58 @@ app.post("/api/auth/enroll", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+//Tasls
+app.get("/api/student/work/:studentId", async (req, res) => {
+  const { studentId } = req.params;
+
+  try {
+    // Assignments
+    const [assignments] = await db.execute(
+      `SELECT a.id, a.title, a.description, a.due_date, a.max_points,
+              'assignment' AS type, c.title AS course_name
+       FROM assignments a
+       JOIN courses c ON c.id = a.course_id
+       JOIN enrollments e ON e.course_id = c.id
+       WHERE e.student_id = ?`,
+      [studentId]
+    );
+
+    // Projects
+    const [projects] = await db.execute(
+      `SELECT p.id, p.title, p.description, p.due_date, p.max_points,
+              'project' AS type, c.title AS course_name
+       FROM projects p
+       JOIN courses c ON c.id = p.course_id
+       JOIN enrollments e ON e.course_id = c.id
+       WHERE e.student_id = ?`,
+      [studentId]
+    );
+
+    // Quizzes
+    const [quizzes] = await db.execute(
+      `SELECT q.id, q.title, q.description, q.available_until, q.max_points,
+              'quiz' AS type, c.title AS course_name
+       FROM quizzes q
+       JOIN courses c ON c.id = q.course_id
+       JOIN enrollments e ON e.course_id = c.id
+       WHERE e.student_id = ?`,
+      [studentId]
+    );
+
+    // Merge + sort by closest deadline
+    const combined = [...assignments, ...projects, ...quizzes].sort(
+      (a, b) => new Date(a.due_date) - new Date(b.due_date)
+    );
+
+    res.json(combined);
+  } catch (error) {
+    console.error("Error fetching student dashboard work:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 
 
