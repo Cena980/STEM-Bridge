@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 export default function StudentWorkFeed({ studentId }) {
   const [items, setItems] = useState([]);
+  const Navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
@@ -17,14 +19,17 @@ export default function StudentWorkFeed({ studentId }) {
     project: "bg-green-500/20 border-green-400",
     quiz: "bg-purple-500/20 border-purple-400",
   };
+  const handleOnclick = (item) => {
+    Navigate(`/student/${item.type}s/${item.id}`)
+  }
 
   return (
     <div className="p-4 bg-sky-800 border-[0.5pt] border-sky-500 rounded-xl shadow-md">
       <h2 className="text-xl font-semibold text-white mb-3">
-        Upcoming Work 📘
+        Tasks
       </h2>
 
-      <div className="max-h-[440px] overflow-y-auto space-y-3 pr-2">
+      <div className=" space-y-3 pr-2">
         {items.length === 0 && (
           <p className="text-gray-300 text-sm text-center py-4">
             No upcoming work 🎉
@@ -35,6 +40,7 @@ export default function StudentWorkFeed({ studentId }) {
           <div
             key={`${item.type}-${item.id}`}
             className={`p-4 rounded-lg border ${typeColors[item.type]} hover:bg-white/10 transition`}
+            onClick={()=>handleOnclick(item)}
           >
             <div className="flex justify-between">
               <h3 className="text-white font-semibold">{item.title}</h3>

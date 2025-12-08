@@ -19,7 +19,7 @@ export default function QuizDetails() {
 
   return (
     <Layout>
-    <div className="p-6 text-white">
+    <div className="p-6 bg-sky-800 rounded-lg border-[0.5pt] text-white">
       <h1 className="text-3xl font-bold mb-4">{quiz.title}</h1>
       <p className="mb-4 text-gray-300">{quiz.description}</p>
 

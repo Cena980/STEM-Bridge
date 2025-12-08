@@ -34,8 +34,6 @@ export default function Navbar() {
   }, []);
   const role = user?.role || "student";
   const topNavItems = [
-    { name: "Notifications", icon: Bell },
-    { name: "Settings", icon: Settings },
     { name: "Sign Out", icon: LogOut },
   ];
     const handleButtonClick = (name) => {
@@ -52,7 +50,7 @@ export default function Navbar() {
   };
 
   return (
-      <div className="bg-slate-800 max-h-20 bg-gradient-to-b from-sky-950 via-teal-900 to-cyan-900">
+      <div className="bg-slate-800 max-h-20 bg-gradient-to-b from-sky-900 to-cyan-900">
         <div className="flex justify-between items-center px-8 py-4">
           <div className="justify-start">
             <h1 className="text-xl font-bold text-white">STEM Bridge</h1>
@@ -64,20 +62,20 @@ export default function Navbar() {
                 <button
                   key={item.name}
                   onClick={() => handleButtonClick(item.name)}
-                  className="flex items-center bg-transparent text-gray-400 hover:text-blue-600 transition-colors"
+                  className="flex items-center hover:scale-105 transition-all duration-300 bg-transparent text-red-600 hover:text-red-400 transition-colors"
                   title={item.name}
                 >
                   <IconComponent className="w-5 h-5" />
                 </button>
               );
             })}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center hover:scale-105 transition-all duration-300 space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                 {formData.avatar_url ? (
                 <img
                   src={`http://localhost:5000${formData.avatar_url}`}
                   alt="Avatar"
-                  className="rounded-full object-cover"
+                  className="rounded-full shadow-sm shadow-sky-400 object-cover"
                 />
                 ) : (
                   <User className="w-5 h-5 text-white" />
