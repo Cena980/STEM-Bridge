@@ -12,11 +12,17 @@ export default function Sidebar() {
         { name: "Dashboard", icon: LayoutDashboard},
         { name: "Profile", icon: User },
         { name: "Courses", icon: BookOpen },
-        { name: "Projects", icon: Folder },
+    ];
+
+    if(role == "student"){
+      navItems.push(        
         { name: "Assignments", icon: FileText },
+        { name: "Projects", icon: Folder },)
+    }
+    navItems.push(
         { name: "Messages", icon: MessageCircleDashed },
         { name: "Community", icon: Users },
-    ];
+    )
 
     useEffect(() => {
         const currentPath = location.pathname.split("/")[1];

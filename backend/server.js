@@ -11,6 +11,7 @@ import cors from "cors";
 import { db } from "./db.js";
 import submissionsRoutes from "./routes/submissions.js";
 import detailsRoutes from "./routes/detailsRoutes.js";
+import reportRoutes from "./reports/reportRoutes.js"
 
 
 
@@ -22,11 +23,17 @@ const __dirname = path.dirname(__filename);
 
 
 const app = express();
-app.use(cors());
+
+app.use("/reports", reportRoutes);
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use("/api/submissions", submissionsRoutes);
 app.use("/api", detailsRoutes);
+
 
 
 // Set up storage for avatars

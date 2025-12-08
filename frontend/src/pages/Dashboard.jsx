@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../lib/auth";
 import StudentWorkFeed from "../components/StudentWorkFeed";
+import Reports from"../components/Reports";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -22,8 +23,10 @@ export default function Dashboard() {
           <Search className="w-6 h-6" /> Explore Courses
         </button>
       </div>
-      {role == "student" && (
+      {role == "student" ? (
         <StudentWorkFeed studentId={user.id} />
+      ):(
+        <Reports />
       )}
     </Layout>
   );

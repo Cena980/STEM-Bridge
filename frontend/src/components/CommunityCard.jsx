@@ -59,7 +59,7 @@ export default function CommunityCard({ Community }) {
       const data = await res.json();
 
       if (data.conversation_id) {
-        navigate(`/messages/${data.conversation_id}`);
+        navigate(`/messages`);
       }
 
     } catch (error) {
