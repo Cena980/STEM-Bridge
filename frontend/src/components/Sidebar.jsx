@@ -35,7 +35,7 @@ export default function Sidebar() {
         }
     }, [location.pathname]);
     return (
-        <div className="text-[10pt] left-0 w-40 bg-gradient-to-r from-sky-950 to-cyan-900 p-2">
+        <div className="text-[10pt] left-0 md:w-40 bg-gradient-to-r from-sky-950 to-cyan-900 p-2">
           <nav className="">
             <ul className="p-0 grid grid-cols-1 md:grid-cols-1 gap-1">
               {navItems.map((item) => {

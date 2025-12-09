@@ -8,7 +8,7 @@ export async function signIn(email, password) {
   const data = await res.json();
 
   if (!res.ok) return { user: null, error: data.message };
-  console.log(`Signed in user: ${data.user}`);
+  console.log(`Signed in user: ${JSON.stringify(data.user)}`);
 
   // ✅ store user in localStorage
   localStorage.setItem("user", JSON.stringify(data.user));
